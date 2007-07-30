@@ -350,7 +350,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 						'tx_ttnews[backPid]' => $this->backPage)); */
 			$contextMenuScript .= '
 					{type:RightContext.TYPE_MENU,
-					text:"'.$newsTime.'",
+					text:"'.str_replace('"','\"',$newsTime).'",
 					url:"'.$url.'"
 					}';
 			if ($rowCount<>$rowLine)

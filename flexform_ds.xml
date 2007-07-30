@@ -1,0 +1,212 @@
+<T3DataStructure>
+	<meta type="array">
+		<langDisable>1</langDisable>
+		<langChildren>1</langChildren>
+	</meta>	
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:newscalendar/locallang.xml:flexform.general_section</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<displayType>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.displayType</label>
+							<onChange>reload</onChange>
+							<config>
+								
+								<type>select</type>
+								<items type="array">	
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.displayType.calendar</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.displayType.list</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>								</items>				
+								<default>2</default>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</displayType>
+					
+					<contextMenuLink>
+						<TCEforms>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link</label>
+							<displayCond>FIELD:displayType:=:1</displayCond>
+							<config>
+								<type>select</type>
+								<eval>num</eval>
+								<items type="array">
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link.left</numIndex>
+										<numIndex index="1">LEFT</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link.right</numIndex>
+										<numIndex index="1">RIGHT</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link.move</numIndex>
+										<numIndex index="1">MOVE</numIndex>
+									</numIndex>				
+								</items>	
+								<default>LEFT</default>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>								
+							</config>
+						</TCEforms>
+					</contextMenuLink> 					
+					<dayNameLength>
+						<TCEforms>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght</label>
+							<displayCond>FIELD:displayType:=:1</displayCond>	
+							<config>
+								<type>select</type>
+								<eval>num</eval>
+								<items type="array">
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.1</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.2</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.3</numIndex>
+										<numIndex index="1">3</numIndex>
+									</numIndex>			
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.4</numIndex>
+										<numIndex index="1">5</numIndex>
+									</numIndex>									
+								</items>
+								<default>1</default>
+								<minitems>1</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>								
+							</config>
+						</TCEforms>
+					</dayNameLength> 
+					<monthLinkDisplay>
+						<TCEforms>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.monthLinkDisplay</label>
+							<displayCond>FIELD:displayType:=:1</displayCond>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</monthLinkDisplay>				 	
+					<listPage>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.calendarListView</label>
+							<displayCond>FIELD:displayType:=:1</displayCond>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>1</show_thumbs>		
+							</config>
+						</TCEforms>
+					</listPage>
+					<destinationPage>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.single_view</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>1</minitems>
+								<show_thumbs>1</show_thumbs>		
+							</config>
+						</TCEforms>
+					</destinationPage>
+					<backPage>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:newscalendar/locallang.xml:flexform.back_page</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>1</show_thumbs>		
+							</config>
+						</TCEforms>
+					</backPage>					
+					<pidList>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:lang/locallang_general.php:LGL.startingpoint</label>
+							<displayCond>FIELD:displayType:=:1</displayCond>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>pages</allowed>
+								<size>3</size>
+								<maxitems>30</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>1</show_thumbs>
+							</config>								
+						</TCEforms>
+					</pidList>
+					<recursion>
+						<TCEforms>
+							<label>LLL:EXT:lang/locallang_general.php:LGL.recursive</label>
+							<displayCond>FIELD:displayType:=:1</displayCond>	
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0"></numIndex>
+										<numIndex index="1"></numIndex>
+									</numIndex>					
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:cms/locallang_ttc.php:recursive.I.1</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:cms/locallang_ttc.php:recursive.I.2</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:cms/locallang_ttc.php:recursive.I.3</numIndex>
+										<numIndex index="1">3</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:cms/locallang_ttc.php:recursive.I.4</numIndex>
+										<numIndex index="1">4</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:cms/locallang_ttc.php:recursive.I.5</numIndex>
+										<numIndex index="1">250</numIndex>
+									</numIndex>
+								</items>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</recursion>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

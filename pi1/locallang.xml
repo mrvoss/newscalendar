@@ -57,6 +57,34 @@
 			
 			
 			
-		</languageKey>		
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="list_mode_1">Mode 1</label>
+			<label index="list_mode_2">Mode 2</label>
+			<label index="list_mode_3">Mode 3</label>
+			
+			<label index="back">Zurück</label>
+			
+			<label index="submit_button_label">Absenden</label>
+			<label index="readmore">Zeige Einträge vom </label>
+			
+			<label index="calPrev">Zum vorherigen Monat</label>	
+			<label index="calNext">Zum nächsten Monat</label>	
+			<label index="calYear">Zeige Einträge vom</label>
+			
+			<label index="pi_list_browseresults_prev">&lt; Zurück</label>
+			<label index="pi_list_browseresults_page">Seite</label>
+			<label index="pi_list_browseresults_next">Vor &gt;</label>
+			<label index="pi_list_browseresults_first">&lt;&lt; Erste Seite</label>
+			<label index="pi_list_browseresults_last">Letzte Seite &gt;&gt;</label>
+			<label index="pi_list_browseresults_displays">Zeige Ergebnisse ###SPAN_BEGIN###%s bis %s&lt;/span&gt; von ###SPAN_BEGIN###%s&lt;/span&gt;</label>
+			<label index="pi_list_browseresults_displays_advanced">Zeige Ergebnisse ###FROM### bis ###TO### von ###OUT_OF###</label>
+			<label index="pi_list_browseresults_to">von</label>
+			<label index="searchButtonLabel">Suche</label>
+			<label index="noResults">Keine Ergebnisse</label>			
+			
+			
+			
+		</languageKey>
 	</data>
 </T3locallang>

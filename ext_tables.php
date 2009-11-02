@@ -38,7 +38,7 @@ $tempColumns = Array (
 );
 t3lib_div::loadTCA("tt_news");
 t3lib_extMgm::addTCAcolumns("tt_news",$tempColumns,1);
-t3lib_extMgm::addToAllTCAtypes("tt_news","--div--;News Calendar,tx_newscalendar_state,tx_newscalendar_calendardate,tx_newscalendar_calendardate_end,--div--;System Options");
+t3lib_extMgm::addToAllTCAtypes("tt_news","--div--;LLL:EXT:newscalendar/locallang_db.xml:tt_news.tx_newscalendar_newscalendartab,tx_newscalendar_state,tx_newscalendar_calendardate,tx_newscalendar_calendardate_end,--div--;LLL:EXT:newscalendar/locallang_db.xml:tt_news.tx_newscalendar_systemoptionstab");
 
 
 t3lib_div::loadTCA('tt_content');

@@ -249,11 +249,13 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 
-				// Default values
-				// CHANGED BY RICC: THE DEFAULT VALUES NOT NEEDED AS THEY PRODUCE EMPTY CALENDAR ENTRIES SOMETIMES!
-				//$resultList [$arrayCounter]['type'] = $row['type'];
-				//$resultList [$arrayCounter]['page'] = $row['page'];
-				//$resultList [$arrayCounter]['ext_url'] = $row['ext_url'];
+				// News item default types
+				$resultList [$arrayCounter]['type'] = $row['type'];
+				$resultList [$arrayCounter]['page'] = $row['page'];
+				$resultList [$arrayCounter]['ext_url'] = $row['ext_url'];
+
+				$resultList [$arrayCounter]['image'] = $row['image'];
+				$resultList [$arrayCounter]['short'] = $row['short'];
 
 				// get the translated record if the content language is not the default language
 				if ($GLOBALS['TSFE']->sys_language_content) {
@@ -472,7 +474,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 	
 				// Set special news type context menu link (external url)
 				if ( $this->dayArray[$i]['type'] == 2 ) {
-					$url = $this->dayArray[$i]['ext_url'];
+					$pieces = explode(" ", $this->dayArray[$i]['ext_url'] );
+					$target = $pieces[1];
+					$url = $this->cObj->getTypoLink_URL( $pieces[0]);
 				}
 	
 				// Validate link if "ext:realurl" is installed.
@@ -480,7 +484,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 				// if(t3lib_extMgm::isLoaded('realurl'))
 				//	$url = 'http://'.t3lib_div::getIndpEnv('HTTP_HOST').'/'.$url;
 	
-				$contextMenuScript .= '{type:RightContext.TYPE_MENU,text:"'.str_replace('"','\"',$newsTime).'",	url:"'.$url.'" }';
+				$contextMenuScript .= '{type:RightContext.TYPE_MENU,text:"'.str_replace('"','\"',$newsTime).'",	url:"'.$url.'", frame: "' . $target . '"  }';
 				if ($rowCount<>$rowLine) {
 					$contextMenuScript .= ','."\n";
 				}
@@ -493,7 +497,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$contextMenuScript .= ']};';
 		return $contextMenuScript;
 	}
-
 
 	# PHP Calendar (version 2.3), written by Keith Devens
 	# http://keithdevens.com/software/php_calendar
@@ -655,63 +658,42 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Creates a list from a database query
+	 * Creates a list from a database query listinterval type
 	 *
 	 * @param    ressource    $res: A database result ressource
 	 * @return    A HTML list if result items
 	 */
 	function makelist(){
+
 		$templateMarker	= '###NEWSCALENDAR_LISTVIEW_ITEM_HEADER###';
 		$template	= $this->cObj->getSubpart($this->listViewTemplate, $templateMarker);
 
 		$out = '<div'.$this->pi_classParam('listrow').'>';
 		reset($this->resultList);
 		$checkDate = 0;
-		while (list($key, $val) = each($this->resultList)) {
+		while ( list( $key, $val) = each( $this->resultList ) ) {
+
 			$recordDate = date('Y-m-d',$val['datetime']);
-			$theListItem = $this->makeListItem($val);
-			if($recordDate != $checkDate && $theListItem && $theListItem != '') {
+
+			$this->internal['currentRow'] = $val;
+			$theListItem = $this->makeListItemNormal( 'listinterval' );
+
+			if ($recordDate != $checkDate && $theListItem && $theListItem != '') {
+
 				$dayHeader = $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$val['datetime']));
 				$marker['###HEADER###'] = '<div class="'.$this->extKey.'_dayHeader">'.$dayHeader.'</div>';
 				$out .= $this->cObj->substituteMarkerArray($template,$marker);
+			
 			}
+
 			$out		.= $theListItem;
 			$checkDate	= date('Y-m-d',$val['datetime']);
+
 		}
 		$out .= '</div>';
 		return $out;
 	}
 	
-	/**
-	 * Implodes a single row from a database to a single line
-	 *
-	 * @return    Imploded column values
-	 */
-	function makeListItem($val) {
-		$this->piVars['tt_news']	= $val['uid'];
-		$this->piVars['backPid']	= $this->backPage;
-		$templateMarker			= '###NEWSCALENDAR_LISTITEM###';
-		$template			= $this->cObj->getSubpart($this->listViewTemplate, $templateMarker);
-		$marker['###URL###']		= $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0,$this->singleView);
-		$marker['###DATETIME###']	= $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['item'],$val['datetime']));
-		$marker['###TITLE###']		= $val['title'];
-		// RICC begin
-		// add markers to the listView
-		$marker['###IMAGE###']		= $this->makeListImageCode($val['image']);
-		if($val['short'] != '') {
-		  $marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($val['short'], $this->conf['listView.']['subheader_stdWrap.']);
-		} else if ($val['short']=='' && $val['bodytext'] != '') {
-		  $marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($val['bodytext'], $this->conf['listView.']['subheader_stdWrap.']);
-		}
-		// remove past events from listView if new TS property hideIfInPast is true
-		if($this->conf['listView.']['hideIfInPast'] && $val['datetime'] < time()) {
-		  $out = '';
-		} else {
-		  $out = $this->cObj->substituteMarkerArray($template,$marker);
-		}
-		// RICC end
-		return $out;
-	}
 
 	// Taken from: http://pt2.php.net/manual/en/function.get-html-translation-table.php
 	function xmlEntities($s){
@@ -896,47 +878,60 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      *
      * @return    Imploded column values
      */
-    function makeListItemNormal()    {
-	$this->piVars['tt_news'] = $this->getFieldContent('uid');
-	$this->piVars['backPid'] = $this->backPage;
-	$marker=array();
-	$wrapped=array();	
-	$templateMarker = '###NEWSCALENDAR_LISTITEM###';
-	$template = $this->cObj->getSubpart($this->listViewTemplate, $templateMarker);
-	$marker['###URL###'] = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0,$this->singleView);
+    function makeListItemNormal( $type = 'list' )    {
 
-	// Set special news type context menu link (local page)
-	if ( $this->getFieldContent('type') == 1 ) {
-		$this->pi_linkTP('dummy',$urlParameters=array(),$cache=0, $this->getFieldContent('page'));
-		$marker['###URL###'] = $this->cObj->lastTypoLinkUrl;
-	}
+		$this->piVars['tt_news'] = $this->getFieldContent('uid');
+		$this->piVars['backPid'] = $this->backPage;
 
-	// Set special news type context menu link (external url)
-	if ( $this->getFieldContent('type') == 2 ) {
-		$marker['###URL###'] = $this->getFieldContent('ext_url');
-	}
+		$marker=array();
+		$wrapped=array();
 
-
-	$marker['###DATETIME###']=  $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$this->getFieldContent('datetime')));
-	$marker['###TITLE###']= $this->getFieldContent('title');
-	// RICC begin
-	// adding markers
-	$marker['###IMAGE###']		= $this->makeListImageCode($this->getFieldContent('image'));
-	
-	if($this->getFieldContent('short') != '') {
-    $marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($this->getFieldContent('short'), $this->conf['listView.']['subheader_stdWrap.']);
-  } else if ($this->getFieldContent('short')=='' && $this->getFieldContent('bodytext') != '') {
-	  $marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($this->getFieldContent('bodytext'), $this->conf['listView.']['subheader_stdWrap.']);
-	}
-	// remove past events from listView if new TS property hideIfInPast is true
-		if($this->conf['listView.']['hideIfInPast'] && $this->getFieldContent('datetime') < time()) {
-		  $out = '';
-		} else {
-		  $out = $this->cObj->substituteMarkerArray($template,$marker);
+		$templateMarker = '###NEWSCALENDAR_LISTITEM###';
+		if ( $type == 'listinterval') {
+			$templateMarker = '###NEWSCALENDAR_LISTITEM_INTERVAL###';
 		}
-		// RICC end
 
-      return $out;
+		$template = $this->cObj->getSubpart($this->listViewTemplate, $templateMarker);
+
+		$marker['###URL###'] = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0,$this->singleView);
+		$marker['###TARGET###'] = '';
+		$marker['###IMAGE###'] = '';
+		$marker['###NEWS_SUBHEADER###'] = '';
+
+
+		// Set special news type context menu link (local page)
+		if ( $this->getFieldContent('type') == 1 ) {
+			$this->pi_linkTP('dummy',$urlParameters=array(),$cache=0, $this->getFieldContent('page'));
+			$marker['###URL###'] = $this->cObj->lastTypoLinkUrl;
+		}
+
+		// Set special news type context menu link (external url)
+		if ( $this->getFieldContent('type') == 2 ) {
+			$pieces = explode(" ", $this->getFieldContent('ext_url') );
+			$target = $pieces[1];
+			$url = $this->cObj->getTypoLink_URL( $pieces[0]);
+			$marker['###URL###'] = $url;
+			$marker['###TARGET###'] = $target;
+		}
+
+
+		$marker['###DATETIME###']= $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$this->getFieldContent('datetime')));
+		$marker['###TITLE###'] = $this->getFieldContent('title');
+		$marker['###IMAGE###'] = $this->makeListImageCode($this->getFieldContent('image'));
+
+		if($this->getFieldContent('short') != '') {
+			$marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($this->getFieldContent('short'), $this->conf['listView.']['subheader_stdWrap.']);
+		} else if ($this->getFieldContent('short')=='' && $this->getFieldContent('bodytext') != '') {
+			$marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($this->getFieldContent('bodytext'), $this->conf['listView.']['subheader_stdWrap.']);
+		}
+		// remove past events from listView if new TS property hideIfInPast is true
+		if($this->conf['listView.']['hideIfInPast'] && $this->getFieldContent('datetime') < time()) {
+			$out = '';
+		} else {
+			$out = $this->cObj->substituteMarkerArray($template,$marker);
+		}
+
+		return $out;
     }
 
     /**

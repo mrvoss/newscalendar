@@ -2,20 +2,82 @@
 these can be set in the NEWSCALENDAR_LISTITEM; added by Clemens Riccabona, Riccabona eSolutions
  -->
 
+
+<!--
+    ############################################################################
+	MAIN TEMPLATE IT WILL ENGLOBE THE OTHERS
+	Markers available:
+	###HEADER###
+	###BODY###
+
+	############################################################################
+-->
+
 <!-- ###NEWSCALENDAR_LISTVIEW### begin-->
 	<div class="newsCalendar_listBody">
-	<div class="newsCalendar_listHeader">
-		###HEADER###
-	</div>
+		<div class="newsCalendar_listHeader">
+			###HEADER### 
+		</div>
 		###BODY###
 	</div>
 <!-- ###NEWSCALENDAR_LISTVIEW### end-->
 
-<!-- ###NEWSCALENDAR_LISTITEM### begin-->
+<!--
+    ############################################################################
+	DISPLAY SINGLE ITEM ON LISTVIEW ( LIST )
+	Markers available:
+	###URL###
+	###TITLE###
+	###TARGET###
+	###DATETIME###
+	###TITLE###
+	###IMAGE###
+	###NEWS_SUBHEADER###
+
+	############################################################################
+-->
+
+<!-- ###NEWSCALENDAR_LISTITEM### begin-->	
 	<div class="newsCalendar_listItem">
-		<a href="###URL###" title="###TITLE###">###DATETIME### -  ###TITLE###</a> 
+		<a href="###URL###" title="###TITLE###" target="###TARGET###">###DATETIME### -  ###TITLE###</a>
+		<div class="newsCalendar_listItem_image"> ###IMAGE### </div>
+		<div class="newsCalendar_listItem_subheader"> ###NEWS_SUBHEADER### </div>
+
 	</div>
 <!-- ###NEWSCALENDAR_LISTITEM### end-->
+
+<!--
+    ############################################################################
+	DISPLAY SINGLE ITEM ON LISTVIEW ( LISTINTERVAL )
+	Markers available:
+	###URL###
+	###TITLE###
+	###TARGET###
+	###DATETIME###
+	###TITLE###
+	###IMAGE###
+	###NEWS_SUBHEADER###
+
+	############################################################################
+-->
+
+<!-- ###NEWSCALENDAR_LISTITEM_INTERVAL### begin-->
+	<div class="newsCalendar_listItem">
+		<a href="###URL###" title="###TITLE###" target="###TARGET###">###TITLE###</a>
+		<div class="newsCalendar_listItem_image"> ###IMAGE### </div>
+		<div class="newsCalendar_listItem_subheader"> ###NEWS_SUBHEADER### </div>
+
+	</div>
+<!-- ###NEWSCALENDAR_LISTITEM_INTERVAL### end-->
+
+<!--
+    ############################################################################
+	HEADER FOR DAY IN LISTVIEW TYPE INTERVAL
+	Markers available:
+	###HEADER###
+
+	############################################################################
+-->
 
 <!-- ###NEWSCALENDAR_LISTVIEW_ITEM_HEADER### begin-->
 	<div class="newsCalendar_listItemHeader">

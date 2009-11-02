@@ -1,5 +1,14 @@
 Changelog
 
+2009-11-01 - Update by Philip Almeida
+Thanks to all just possible because of you :)
+  # Link to external page and article are now working, link to blank page on external url also enabled
+	http://bugs.typo3.org/view.php?id=11928
+  # Javascript error removed.
+    http://bugs.typo3.org/bug_update_page.php?bug_id=11893
+  # Translation enabled for "News Calendar" and "System Options" tabs.
+    Thanks to Sébastien DELCROIX
+
 2009-09-12 - Update by Philip Almeida
 Thanks to all bug reporters just possible because of you :)
   # First Date Selector Add On - Beta - Thanks to Максим Левицкий - Maxim Levicky

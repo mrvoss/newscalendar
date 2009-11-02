@@ -67,11 +67,20 @@ obj.attachEvent('on'+evt,act);
 }
 },
 render:function(caller,name){
+
 var url,title;
 var name=name||caller.getAttribute("id");
 var thisMenu=this.getMenu(name);
+
+try{
+
 var attributes=thisMenu["attributes"].split(',');
 var items=thisMenu.items;
+
+} catch (e) {
+	return;
+}
+
 var objMap=this.buildAttributeMap(attributes,caller);
 this.killMenu();
 this.buildMenu(caller);

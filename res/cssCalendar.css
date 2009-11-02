@@ -54,12 +54,29 @@
 	padding:1em;
 }
 .newsCalendar_listItem{
+	display: table;
 	font-size:1em;
-	padding-left:1em;
+	padding-top:1em;
+}
+
+.newsCalendar_listItem a{
+	font-weight: bold;
+}
+
+.newsCalendar_listItem_image{
+	display: table;
+	float:left;
+	padding: 3px;
+	border: 1px solid #CCC;
+	margin-top: 3px;
+	margin-right: 3px;
+}
+.newsCalendar_listItem_subheader{
+	display: table;
+	float:left;
 }
 .newsCalendar_listItemHeader{
 	font-weight:bold;
-	padding-top:0.5em;
-	padding-bottom:0.25em;
+	padding-top:1em;
 	font-size:1.25em;
 }

@@ -1,2 +1,2 @@
 
-Feel free to add some documentation or simply add a link to the online manual.
+Look at the manual and the Changelog file for information!

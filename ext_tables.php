@@ -1,5 +1,45 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
+$tempColumns = Array (
+	"tx_newscalendar_state" => Array (
+		"exclude" => 1,
+		"label" => "LLL:EXT:newscalendar/locallang_db.php:tt_news.tx_newscalendar_state",
+		"config" => Array (
+			"type" => "check",
+			"default" => 1,
+		)
+	),
+	'tx_newscalendar_calendardate' => Array (
+		'exclude' => 1,
+		'l10n_mode' => 'mergeIfNotBlank',
+		"label" => "LLL:EXT:newscalendar/locallang_db.php:tt_news.tx_newscalendar_calendardate",
+		'config' => Array (
+			'type' => 'input',
+			'size' => '10',
+			'max' => '20',
+			'eval' => 'datetime',
+			'checkbox' => '0',
+			'default' => '0'
+		)
+	),
+	'tx_newscalendar_calendardate_end' => Array (
+		'exclude' => 1,
+		'l10n_mode' => 'mergeIfNotBlank',
+		"label" => "LLL:EXT:newscalendar/locallang_db.php:tt_news.tx_newscalendar_calendardate_end",
+		'config' => Array (
+			'type' => 'input',
+			'size' => '10',
+			'max' => '20',
+			'eval' => 'datetime',
+			'checkbox' => '0',
+			'default' => '0'
+		)
+	)
+);
+t3lib_div::loadTCA("tt_news");
+t3lib_extMgm::addTCAcolumns("tt_news",$tempColumns,1);
+t3lib_extMgm::addToAllTCAtypes("tt_news","--div--;LLL:EXT:newscalendar/locallang_db.xml:tt_news.tx_newscalendar_newscalendartab,tx_newscalendar_state,tx_newscalendar_calendardate,tx_newscalendar_calendardate_end,--div--;LLL:EXT:newscalendar/locallang_db.xml:tt_news.tx_newscalendar_systemoptionstab");
+
 
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key,pages';

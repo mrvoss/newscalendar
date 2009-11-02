@@ -27,7 +27,12 @@
 									<numIndex index="2" type="array">
 										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.displayType.list</numIndex>
 										<numIndex index="1">2</numIndex>
-									</numIndex>								</items>				
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.displayType.listInterval</numIndex>
+										<numIndex index="1">3</numIndex>
+									</numIndex>
+								</items>
 								<default>2</default>
 								<minitems>1</minitems>
 								<maxitems>1</maxitems>
@@ -60,10 +65,10 @@
 								<default>LEFT</default>
 								<minitems>1</minitems>
 								<maxitems>1</maxitems>
-								<size>1</size>								
+								<size>1</size>
 							</config>
 						</TCEforms>
-					</contextMenuLink> 					
+					</contextMenuLink>
 					<dayNameLength>
 						<TCEforms>
 							<label>LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght</label>
@@ -83,11 +88,15 @@
 									<numIndex index="3" type="array">
 										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.3</numIndex>
 										<numIndex index="1">3</numIndex>
-									</numIndex>			
+									</numIndex>
 									<numIndex index="4" type="array">
 										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.4</numIndex>
+										<numIndex index="1">4</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght.5</numIndex>
 										<numIndex index="1">5</numIndex>
-									</numIndex>									
+									</numIndex>
 								</items>
 								<default>1</default>
 								<minitems>1</minitems>
@@ -155,7 +164,6 @@
 						<TCEforms>
 							<exclude>1</exclude>
 							<label>LLL:EXT:lang/locallang_general.php:LGL.startingpoint</label>
-							<displayCond>FIELD:displayType:=:1</displayCond>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>
@@ -170,7 +178,6 @@
 					<recursion>
 						<TCEforms>
 							<label>LLL:EXT:lang/locallang_general.php:LGL.recursive</label>
-							<displayCond>FIELD:displayType:=:1</displayCond>	
 							<config>
 								<type>select</type>
 								<items type="array">

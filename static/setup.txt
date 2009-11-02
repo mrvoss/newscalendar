@@ -1,0 +1,36 @@
+plugin.tx_newscalendar_pi1 = USER
+plugin.tx_newscalendar_pi1 {
+
+	file.cssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
+	file.cssContextMenu = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
+	file.jsContextMenu = {$plugin.tx_newscalendar_pi1.file.jsContextMenu}
+	file.jsJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
+	file.jsDateChanger = {$plugin.tx_newscalendar_pi1.file.jsDateChanger}
+	file.listView.listViewTemplate = {$plugin.tx_newscalendar_pi1.file.listView.listViewTemplate}
+
+	show.allRecords = {$plugin.tx_newscalendar_pi1.show.allRecords}
+
+	special.parserFunction = htmlspecialchars
+
+	listView {
+	  subheader_stdWrap.crop = 180 | ...
+	  hideIfInPast = 0
+	  order = asc              
+          strftime.main = %B - %Y  
+          strftime.header = %d - %A
+          strftime.item = %H:%M    
+	  image {
+	    file.maxW = 136
+            file.maxH = 150
+	  }
+	}
+	calendar {
+	  dateChanger = 0
+	  addNoCache2Navigation = 1
+	  hideIfInPast = 0
+	  strftime.contextHeader = %A, %Y-%m-%d
+	  strftime.contextItem = %H:%M
+	  startWeekDay = {$plugin.tx_newscalendar_pi1.calendar.startWeekDay}
+	  timeZone = {$plugin.tx_newscalendar_pi1.calendar.timeZone}
+	}
+}

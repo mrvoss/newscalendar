@@ -1,0 +1,65 @@
+.calendar-table{
+	width:100%;
+	padding:1em;
+}
+.calendar-table a{
+	text-decoration:underline;
+}
+.calendar-table TD, .calendar-table TH{
+	padding:3px;
+	text-align:center;
+}
+.calendar-table TH{
+	color:#333333;
+	border-top:1px solid #7e7e7e;
+	border-bottom:1px solid #7e7e7e;
+}
+.calendar-table caption{
+	font-size:200%;
+	color:#333333;
+	text-transform:uppercase;
+}
+.linked_today{
+	padding:2px;
+	color:#333333;
+	background-color:#C7D5FE;
+	cursor:pointer;
+	text-decoration:underline;
+	border:1px solid #333333;
+}
+.linked_today_nolink{
+	padding:2px;
+	color:#333333;
+	background-color:#C7D5FE;
+}
+.linked_day{
+	padding:2px;
+	color:#FFFFFF;
+	background-color:#7e7e7e;
+	cursor:pointer;
+	text-decoration:underline;
+	border:1px solid #333333;
+}
+
+/* List view CSS */
+.newsCalendar_listHeader{
+	font-size:1.5em;
+	font-weight:bold;
+	background-color:#C7D5FE;
+	color:#333333;
+	border:1px solid #7e7e7e;
+	padding:0.5em;
+}
+.newsCalendar_listBody{
+	padding:1em;
+}
+.newsCalendar_listItem{
+	font-size:1em;
+	padding-left:1em;
+}
+.newsCalendar_listItemHeader{
+	font-weight:bold;
+	padding-top:0.5em;
+	padding-bottom:0.25em;
+	font-size:1.25em;
+}

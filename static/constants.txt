@@ -1,0 +1,34 @@
+###
+# This are the default TS-constants for newscalendar
+##
+
+plugin.tx_newscalendar_pi1 = USER
+plugin.tx_newscalendar_pi1 {
+
+    # cat=plugin.newscalendar//0; type=string; label= StyleSheet for Calendar:  CSS file for the calendar
+	file.cssCalendar = EXT:newscalendar/res/cssCalendar.css
+
+    # cat=plugin.newscalendar//1; type=string; label= StyleSheet for ContextMenu:  CSS file for the context menu of the calendar
+	file.cssContextMenu = EXT:newscalendar/res/cssContextMenu.css
+
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for ContextMenu: JavaScript file for the context menu of the calendar
+	file.jsContextMenu = EXT:newscalendar/res/rightcontext_compressed.js
+
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript JQuery API: Javascript API
+	file.jsJQuery = EXT:newscalendar/res/jquery.js
+
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for Date Changer: Advanced date changer
+	file.jsDateChanger = EXT:newscalendar/res/date_changer.js
+
+    # cat=plugin.newscalendar//2; type=string; label= Template file for the list view:  Html template file for list view
+	file.listView.listViewTemplate = EXT:newscalendar/res/listViewTemplate.html
+
+    # cat=plugin.newscalendar//3; type=boolean; label= Show all records: This option overwrites the local news record option "Display in calendar"
+	show.allRecords = 0
+
+    # cat=plugin.newscalendar//4; type=int; label= Start week day: The week day calendar starts
+	calendar.startWeekDay = 0
+
+    # cat=plugin.newscalendar//5; type=string; label= date_default_timezone_set default argument
+	calendar.timeZone = 
+}

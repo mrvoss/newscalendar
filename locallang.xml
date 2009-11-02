@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for extension 'newscalendar'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="pi1_title">News Calendar</label>
+			<label index="pi1_plus_wiz_description">News Calendar for EXT:tt_news</label>
+			<label index="flexform.general_section">General</label>	
+			<label index="flexform.template_section">Template</label>
+			<label index="flexform.displayType">Display type:</label>
+			<label index="flexform.displayType.calendar">Calendar</label>
+			<label index="flexform.displayType.list">List</label>
+			<label index="flexform.displayType.listInterval">ListInterval</label>
+			<label index="flexform.monthLinkDisplay">Calendar list link display:</label>
+			<label index="flexform.calendarListView">Calendar list view page:</label> 
+			<label index="flexform.single_view">Single view page for tt_news:</label>
+			<label index="flexform.back_page">Back page for tt_news:</label>
+			<label index="flexform.day_name_lenght">Day name length:</label>
+			<label index="flexform.day_name_lenght.1">1 letter</label>
+			<label index="flexform.day_name_lenght.2">2 letters (Cyrillic 1)</label>
+			<label index="flexform.day_name_lenght.3">3 letters</label>
+			<label index="flexform.day_name_lenght.4">4 letters (Cyrillic 2)</label>
+			<label index="flexform.day_name_lenght.5">Full lenght day names</label>
+			<label index="flexform.context_menu_link">Context activation type:</label>
+			<label index="flexform.context_menu_link.left">Left mouse button</label>
+			<label index="flexform.context_menu_link.right">Right mouse button</label>
+			<label index="flexform.context_menu_link.move">On mouse over</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="pi1_title">News Kalender</label>
+			<label index="pi1_plus_wiz_description">News Kalender für Extension tt_news</label>
+			<label index="flexform.general_section">Allgemein</label>	
+			<label index="flexform.template_section">Template</label>
+			<label index="flexform.displayType">Anzeigeart:</label>
+			<label index="flexform.displayType.calendar">Kalender</label>
+			<label index="flexform.displayType.list">Liste</label>
+			<label index="flexform.displayType.listInterval">Listeninterval</label>
+			<label index="flexform.monthLinkDisplay">Kalenderliste Link anzeigen:</label>
+			<label index="flexform.calendarListView">Kalenderliste Seite:</label> 
+			<label index="flexform.single_view">Einzelansicht News (Seite):</label>
+			<label index="flexform.back_page">Zurück Seite für tt_news:</label>
+			<label index="flexform.day_name_lenght">Länge der Abkürzung für Tag:</label>
+			<label index="flexform.day_name_lenght.1">1 Buchstabe</label>
+			<label index="flexform.day_name_lenght.2">2 Buchstaben (Cyrillic 1)</label>
+			<label index="flexform.day_name_lenght.3">3 Buchstaben</label>
+			<label index="flexform.day_name_lenght.4">4 Buchstaben (Cyrillic 2)</label>
+			<label index="flexform.day_name_lenght.5">Tag ausschreiben</label>
+			<label index="flexform.context_menu_link">Kontextmenü Aktivierungsart:</label>
+			<label index="flexform.context_menu_link.left">Linke Maus Taste</label>
+			<label index="flexform.context_menu_link.right">Rechte Maus Taste</label>
+			<label index="flexform.context_menu_link.move">Beim Darüberfahren mit der Maus</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="pi1_title">Calendrier de nouvelles</label>
+			<label index="pi1_plus_wiz_description">Calendrier de nouvelles pour EXT:tt_news</label>
+			<label index="flexform.general_section">Général</label>
+			<label index="flexform.template_section">Gabarit</label>
+			<label index="flexform.displayType">Affichage:</label>
+			<label index="flexform.displayType.calendar">Calendrier</label>
+			<label index="flexform.displayType.list">Liste</label>
+			<label index="flexform.monthLinkDisplay">Afficher le lien vers la liste:</label>
+			<label index="flexform.calendarListView">Page d'affichage en liste:</label>
+			<label index="flexform.single_view">Page de détail de nouvelles tt_news:</label>
+			<label index="flexform.back_page">Page de retour tt_news:</label>
+			<label index="flexform.day_name_lenght">Longueur de nom de jour:</label>
+			<label index="flexform.day_name_lenght.1">1 lettre</label>
+			<label index="flexform.day_name_lenght.2">2 lettres (Cyrillic 1)</label>
+			<label index="flexform.day_name_lenght.3">3 lettres</label>
+			<label index="flexform.day_name_lenght.4">4 letters (Cyrillic 2)</label>
+			<label index="flexform.day_name_lenght.5">Noms complets</label>
+			<label index="flexform.context_menu_link">Activation contextuelle:</label>
+			<label index="flexform.context_menu_link.left">Clic-droit</label>
+			<label index="flexform.context_menu_link.right">Clic-gauche</label>
+			<label index="flexform.context_menu_link.move">Survol de la souris</label>
+		</languageKey>
+	</data>
+</T3locallang>

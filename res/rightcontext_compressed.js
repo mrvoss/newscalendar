@@ -43,10 +43,10 @@ return RightContext.render(this)
 }else if(this.menuTriggerEvent=="MOVE"){
 if(!document.all){
 this.bindEvent('mouseover',tags[e],function(e){RightContext.locateMousePos(e);return RightContext.render(this);});
-this.bindEvent('mouseout',tags[e],function(e){setTimeout("RightContext.killMenu()",10);});
+//this.bindEvent('mouseout',tags[e],function(e){setTimeout("RightContext.killMenu()",10);});
 }else{
 tags[e].onmouseover=function(e){RightContext.locateMousePos(e);return RightContext.render(this);};
-tags[e].onmouseout=function(e){setTimeout("RightContext.killMenu()",10);};
+//tags[e].onmouseout=function(e){setTimeout("RightContext.killMenu()",10);};
 }
 }
 }

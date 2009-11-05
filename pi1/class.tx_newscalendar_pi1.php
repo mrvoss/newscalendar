@@ -37,7 +37,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 	var $prefixId		= 'tx_ttnews';		// Same as class name
 	var $scriptRelPath	= 'pi1/class.tx_newscalendar_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey			= 'newscalendar';	// The extension key.
-	var $pi_checkCHash	= true;
+	var $pi_checkCHash	= false;
 	var $resultList;
 	var $resultListCount;
 	var $globalRes;
@@ -60,7 +60,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
 		/*
 		* Retrieve day vars

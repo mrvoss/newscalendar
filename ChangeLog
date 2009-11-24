@@ -1,50 +1,99 @@
 Changelog
 
-2009-11-05 - Update by Philip Almeida
-	Extension changed to USER_INT
+2009-11-17 – Update by Philip Almeida
+Altered tooltip render engine
+Beauty Tips - http://www.lullabot.com/files/bt/bt-latest/DEMO/index.html
+Tutorial updated to current template
+Version 2.0.0
+
+2009-11-08 – Update by Philip Almeida
+Altered tooltip render engine
+Now using: http://flowplayer.org/tools/tooltip.html
 
 2009-11-01 - Update by Philip Almeida
-Thanks to all just possible because of you :)
-  # Link to external page and article are now working, link to blank page on external url also enabled
-	http://bugs.typo3.org/view.php?id=11928
-  # Javascript error removed.
-    http://bugs.typo3.org/bug_update_page.php?bug_id=11893
-  # Translation enabled for "News Calendar" and "System Options" tabs.
-    Thanks to Sébastien DELCROIX
+Mouse over revised
+Thanks to Andreas Döring
+# Link to external page and article are now working, link to blank page on external url also enabled.
+http://bugs.typo3.org/view.php?id=11928
+# Javascript error removed.
+http://bugs.typo3.org/bug_update_page.php?bug_id=11893
+#   Translation enabled for "News Calendar" and "System Options" tabs.
+Thanks to Sébastien DELCROIX
 
 2009-09-12 - Update by Philip Almeida
 Thanks to all bug reporters just possible because of you :)
-  # First Date Selector Add On - Beta - Thanks to Максим Левицкий - Maxim Levicky
-  # Better contextmenu positioning after mouseover
-  # http://bugs.typo3.org/view.php?id=10709 (Thanks to Philipp Zbrug)
-  # http://bugs.typo3.org/view.php?id=11323
-  # http://bugs.typo3.org/view.php?id=10414
-  # http://bugs.typo3.org/view.php?id=8810
-  # http://bugs.typo3.org/view.php?id=8388
-  # http://bugs.typo3.org/view.php?id=11484 (Tutorial Update)
+# First Date Selector Add On - Beta - Thanks to Максим Левицкий - Maxim Levicky
+# Better contextmenu positioning after mouseover 
+# http://bugs.typo3.org/view.php?id=10709 (Thanks to Philipp Zbrug)
+# http://bugs.typo3.org/view.php?id=11323
+# http://bugs.typo3.org/view.php?id=10414
+# http://bugs.typo3.org/view.php?id=8810
+# http://bugs.typo3.org/view.php?id=8388
+ # http://bugs.typo3.org/view.php?id=11484 (Tutorial Update)
 
 2009-04-15 - Update by Clemens Riccabona
-  # Small code cleanup (if-statement without parentheses is not following CGL)
-  # Bugfix: if hideIfInPast was set in listView the entries were not displayed but the date-header; now resolved
-  # Some small, almost cosmetic changes in manual
+# Small code cleanup (if-statement without parentheses is not following CGL)
+# Bugfix: if hideIfInPast was set in listView the entries were not displayed but the date-header; now resolved
+# Some small, almost cosmetic changes in manual
 
 2009-04-15 - Update by Clemens Riccabona
-  # locale_all setting extended by the global config.renderCharset (TypoScript - config) due to encoding bugs
-  # functions converSpecialCharacters: changed from hardcoded charset to config.renderCharset (TypoScript - config) due to encoding bugs
-  # Small array counter mistake
-  # Small bugfix -> sometimes empty first day of month appeared in calender listview
+# locale_all setting extended by the global config.renderCharset (TypoScript - config) due to encoding bugs
+# functions converSpecialCharacters: changed from hardcoded charset to config.renderCharset (TypoScript - config) due to encoding bugs
+# Small array counter mistake
+# Small bugfix -> sometimes empty first day of month appeared in calender listview
+
+2009-01-24 Corrected bug reported by Jordan Bergen.
 
 2009-01-02 Update by Michael Hitzler, paravista media: Use Hook in tt_news in order to display markers for start and end date.
-2008-05-30 Changes by Clemens Riccabona, Riccabona eSolutions: Added the possibilty to switch the JavaScript via TypoScript. Default is now a compressed version.
-Small issue with onmouseover event changed in rightcontext.js (and compressed version). Some German Translation changed/added.
-2008-04-24 Changes by Clemens Riccabona, Riccabona eSolutions: Two new markers in template possible (but not set for backwards compatibility) for displaying image and short/bodytext (cropped) in listView. Added the possibility to hide past events on listView and calendar seperatly. All with full TypoScript support. Changed some internal filehandling for more comfort and compatibility. Added german translations for the Frontend.
-2008-01-21 New option for date display of news in calendar. Title for news item in pop up window.
+
+2008-12-30 Added support for all news record types (internal page, external record).
+Thanks to Gregory for reporting missing feature.
+
+2008-05-30: Changes by Clemens Riccabona, Riccabona eSolutions: Added the possibilty to switch the JavaScript via TypoScript. Default is now a compressed version. Small issue with onmouseover event changed in rightcontext.js (and compressed version). Some German Translation changed/added.
+
+2008-04-24 Date format on multiple events bug fixed.
+
+2008-04-24 Special Characters bug fixed
+
+2008-04-24 Cache bug fixed
+
+2008-04-24 Changes by Clemens Riccabona, Riccabona eSolutions: Two new markers in template possible (but not set for backwards compatibility) for displaying image and short/bodytext (cropped) in listView. Added the possibility to hide past events on listView and calendar separately. All with full TypoScript support. Changed some internal file handling for more comfort and compatibility. Added German translations for the Frontend.
+
+2008-03-25 Function gmmktime() removed in favor of mktime(); Day names in calendar are now parsed via Typoscript config option. Add new option to parsing function: “skip” .
+
+2008-03-20 Add a flag to set the php special characters parser function. Thanks to Василий Мосийчук (Vasyl Mosiychuk ) - typo3.net.ua, for reporting and helping on the debug.
+
+2008-03-18 Re – add Dutch translation missing feature since 2008-01-25.  Thanks to Jordan Bergen (GeefGratis.nl)
+
+2008-03-14 XML compliance update thanks to Markus Waskowski (growing-media.de)
+
+2008-02-04 Calendar table closing TR, thanks to Tomaz Zaman. 
+		   Link URL rewrite.
+
+2008-02-01 Fixed bug in strtotime conversion with german characters – Thanks to Markus Waskowski.
+		  Fixed bug in display type “list”  datetime was not showing correctly – Thanks to James Huang 
+		  Altered the CSS include render type (now renders inside the header tag) – Thanks to Marcus Persson 
+
+2008-01-26 Possible to render plugin via Typoscript
+
+2008-01-25 Add Dutch translation thanks to Jordan Bergen. 
+
+2008-01-24 Possibility to show the same news item in a period interval. Sponsor (www.eventonizer.nl)
+
+2008-01-21 New option for date display of news in calendar.  Thanks to Martin Joisten" www.climbing.de for the ideia.
+
 2008-01-14 RealUrl extension compatibility issues solved, thanks to Vera Spiegel.
+
 2007-12-30 Add constant variable to choose start week day for calendar. Thanks to Thomas Niederberger for the ideia.
+
 2007-12-08 Fixed bug in month display of special characters(Thanks to Patrick Gaumond and his team).
+
 2007-12-08 Manual revision.
-2007-12-3 Add  “tt_news” field “Display in calendar” to check if news item should be displayed in newscalendar extension. (Thanks to Patrick Gaumond for the ideia and support, on testing modifications)
+
+2007-12-03 Add  “tt_news” field “Display in calendar” to check if news item should be displayed in newscalendar extension. (Thanks to Patrick Gaumond for the ideia and support, on testing modifications)
 Change extension icon, thanks to Alexandre Moore http://nuovext.pwsp.net/ 
 Add French Translation thanks to Patrick Gaumond .
-2007-11-19 Manual Revision (Multilanguage Site – Thanks Nicolas for the idea.)
+
+2007-11-19 Manual Revision (Multilaguage Site – Thanks Nicolas for the idea.)
+
 2007-06-28 First released version

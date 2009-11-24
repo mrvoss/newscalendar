@@ -1,55 +1,66 @@
-.rcMenuContainer {
-    font-family: Verdana, Arial;
-    position: absolute;
-    border: 1px solid #7e7e7e;
-    background: #EAE8E3;
-    padding:2px;
-    z-index:10;
+/**
+ * styling for tip content
+ * mostly for example
+ * note: canvas (the tip itself) cannot be styled here. use javascript options for that.
+ */
+.bt-content {
+  font-size: small;
+  color: #000;
+  line-height: normal;
 }
-.rcMenuItem {
-    width:200px;
-    float:left;
-    font-size:11px;
-    font-weight:normal;
-    padding:3px;
-    text-decoration:none;
-    text-decoration:underline;
-    color:#333333;
-    background-color:#cccccc;
-    border:1px solid #7E7E7E;
+
+/* styling for active target elements - usually for background hilighting */
+.bt-active {
+  /* example:
+  background-color: yellow !important;
+  */
 }
-.rcMenuItemHover {
-    width:200px;
-    float:left;
-    font-size:11px;
-    font-weight:normal;
-    padding:3px;
-    text-decoration:underline;
-    background-color:#C7D5FE;
-    color:#333333;
-    border:1px solid #7E7E7E;
+
+
+/**
+ * Content related
+ */
+
+.newscalendarTooltip {
+	display: none;
 }
-.rcMenuItemText {
-    font-size:100%;
-    font-weight:bold;
-    border:0px;
-    padding:2px;
-    color:#FFFFFF;
-    border: 0px solid #FFFFFF;
-    background: #7e7e7e;
-    text-align:center;
+.newscalendarTooltipHeader {
+	font-weight: bold;
+	font-size: 14px;
 }
-.rcMenuItemTextExt {
-    font-size:11px;
-    font-weight:normal;
-    border:1px dotted grey;
-    padding:2px;
-} 
-.rcMenuSeparator{
-    color:#7e7e7e;
-    height:1px;
-    width:200px;
+
+.newscalendarTooltipItemContainer {
+	font-size: 12px;
 }
-.rcImage {
-	padding-right:4px; 
+
+.newscalendar-tip {
+  /* for IE */
+  filter:alpha(opacity=90);
+  /* CSS3 standard */
+  opacity:0.9;
+}
+
+/*
+ * Render item related
+ */
+
+.newsCalendar_calendarItem{
+	display: table;
+	font-size:1em;
+	padding-top:1em;
+}
+.newsCalendar_calendarItem a{
+	font-weight: bold;
+}
+.newsCalendar_calendarItem_image{
+	display: table;
+	float:left;
+	padding: 3px;
+	border: 1px solid #CCC;
+	margin-top: 3px;
+	margin-right: 3px;
+}
+.newsCalendar_calendarItem_subheader{
+}
+.newsCalendar_calendarItemHeader{
 }

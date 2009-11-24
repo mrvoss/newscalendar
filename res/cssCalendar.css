@@ -1,5 +1,4 @@
 .calendar-table{
-	width:100%;
 	padding:1em;
 }
 .calendar-table a{
@@ -36,7 +35,6 @@
 	padding:2px;
 	color:#FFFFFF;
 	background-color:#7e7e7e;
-	cursor:pointer;
 	text-decoration:underline;
 	border:1px solid #333333;
 }

@@ -40,35 +40,6 @@
 							</config>
 						</TCEforms>
 					</displayType>
-					
-					<contextMenuLink>
-						<TCEforms>
-							<label>LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link</label>
-							<displayCond>FIELD:displayType:=:1</displayCond>
-							<config>
-								<type>select</type>
-								<eval>num</eval>
-								<items type="array">
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link.left</numIndex>
-										<numIndex index="1">LEFT</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link.right</numIndex>
-										<numIndex index="1">RIGHT</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:newscalendar/locallang.xml:flexform.context_menu_link.move</numIndex>
-										<numIndex index="1">MOVE</numIndex>
-									</numIndex>				
-								</items>	
-								<default>LEFT</default>
-								<minitems>1</minitems>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</contextMenuLink>
 					<dayNameLength>
 						<TCEforms>
 							<label>LLL:EXT:newscalendar/locallang.xml:flexform.day_name_lenght</label>

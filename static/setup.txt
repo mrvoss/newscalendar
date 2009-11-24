@@ -3,28 +3,50 @@ plugin.tx_newscalendar_pi1 {
 
 	file.cssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
 	file.cssContextMenu = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
-	file.jsContextMenu = {$plugin.tx_newscalendar_pi1.file.jsContextMenu}
 	file.jsJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
+	file.jsJQueryTooltip = {$plugin.tx_newscalendar_pi1.file.jsJQueryTooltip}
 	file.jsDateChanger = {$plugin.tx_newscalendar_pi1.file.jsDateChanger}
-	file.listView.listViewTemplate = {$plugin.tx_newscalendar_pi1.file.listView.listViewTemplate}
+	file.jsNewscalendar = {$plugin.tx_newscalendar_pi1.file.jsNewscalendar}
+	file.listViewTemplate = {$plugin.tx_newscalendar_pi1.file.listViewTemplate}
+	file.calendarViewTemplate = {$plugin.tx_newscalendar_pi1.file.calendarViewTemplate}
+
 
 	show.allRecords = {$plugin.tx_newscalendar_pi1.show.allRecords}
 
 	special.parserFunction = htmlspecialchars
 
+	tip {
+		fadeSpeed = 200
+		width = 300
+		backgroundColor = #EEEEEE
+		borderColor = #CCCCCC
+		borderWidth = 4
+		radius = 10
+		padding = 10
+		spikeLength = 20
+		spikeGirth = 20
+		shadow = true
+	    shadowBlur = 12
+		shadowOffsetX = 0
+		shadowOffsetY = 5
+		positions = [ 'top', 'right', 'bottom', 'left' ]
+	}
+
 	listView {
 	  subheader_stdWrap.crop = 180 | ...
 	  hideIfInPast = 0
 	  order = asc              
-          strftime.main = %B - %Y  
-          strftime.header = %d - %A
-          strftime.item = %H:%M    
+	  strftime.main = %B - %Y
+	  strftime.header = %d - %A
+	  strftime.item = %H:%M
 	  image {
 	    file.maxW = 136
-            file.maxH = 150
+        file.maxH = 150
 	  }
 	}
 	calendar {
+	  loadJQuery = 1
+	  loadJQueryTooltip = 1
 	  dateChanger = 0
 	  addNoCache2Navigation = 1
 	  hideIfInPast = 0
@@ -32,5 +54,9 @@ plugin.tx_newscalendar_pi1 {
 	  strftime.contextItem = %H:%M
 	  startWeekDay = {$plugin.tx_newscalendar_pi1.calendar.startWeekDay}
 	  timeZone = {$plugin.tx_newscalendar_pi1.calendar.timeZone}
+	  image {
+	    file.maxW = 50
+        file.maxH = 50
+	  }
 	}
 }

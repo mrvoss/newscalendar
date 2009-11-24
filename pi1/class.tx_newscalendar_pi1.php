@@ -37,7 +37,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 	var $prefixId		= 'tx_ttnews';		// Same as class name
 	var $scriptRelPath	= 'pi1/class.tx_newscalendar_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey			= 'newscalendar';	// The extension key.
-	var $pi_checkCHash	= false;
+	var $pi_checkCHash	= true;
 	var $resultList;
 	var $resultListCount;
 	var $globalRes;
@@ -60,7 +60,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
 		/*
 		* Retrieve day vars
@@ -88,24 +88,36 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->cssContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssContextMenu']));
 		$this->jsContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsContextMenu']));
 		$this->jsJQuery			= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQuery']));
+		$this->jsJQueryTooltip	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQueryTooltip']));
 		$this->jsDateChanger	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsDateChanger']));
 
-		// Here are the old ones
-		//$this->cssCalendar		= ($this->conf['file.']['cssCalendar']		=='EXT:newscalendar/res/calendar.css'		?t3lib_extMgm::extRelPath('newscalendar').'res/cssCalendar.css':$this->conf['file.']['cssCalendar']);
-		//$this->cssContextMenu	= ($this->conf['file.']['cssContextMenu']	=='EXT:newscalendar/res/cssContextMenu.css'	?t3lib_extMgm::extRelPath('newscalendar').'res/cssContextMenu.css':$this->conf['file.']['cssContextMenu']);
-		// RICC end
+		$this->jsNewscalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsNewscalendar']));
 
 		// Aditional file include.
-		$GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc'] = '<link href="'.$this->cssCalendar.'" rel="stylesheet" type="text/css" />'."\n".
-																		'<link href="'.$this->cssContextMenu.'" rel="stylesheet" type="text/css" />'."\n";
+		if ( $this->conf['calendar.']['loadJQuery'] ) {
+			// TODO: Move to header section
+			$jQueryAPI = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>';
+		}
+		// Aditional file include.
+		if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
+			// TODO: Move to header section
+			$jQueryAPI2 = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>';
+		}
+		$GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc'] = '<link href="'	.	$this->cssCalendar		.	'" rel="stylesheet" type="text/css" />'	. "\n" .
+																		'<link href="'	.	$this->cssContextMenu	.	'" rel="stylesheet" type="text/css" />'	. "\n" .
+																		'<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n" .
+																		$jQueryAPI	.	"\n" .
+																		$jQueryAPI2	.	"\n";
 
 		/* 
 		* Set template file for list view
 		*/
 		// RICC begin -> Do it the most easiest way via t3 api funcs.
 		// Now you can overwrite it easily within your own TS setup -> see above
-		$this->listViewTemplate = $this->cObj->fileResource($this->conf['file.']['listView.']['listViewTemplate']);
+		$this->listViewTemplate = $this->cObj->fileResource($this->conf['file.']['listViewTemplate']);
 		// RICC end
+	
+		$this->calendarViewTemplate = $this->cObj->fileResource($this->conf['file.']['calendarViewTemplate']);
 
 		/*
 		* Retrieve Flexform variables
@@ -170,7 +182,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		//setlocale(LC_ALL, $GLOBALS['TSFE']->tmpl->setup['config.']['locale_all']);
 		setlocale(LC_ALL, $GLOBALS['TSFE']->tmpl->setup['config.']['locale_all'].".".$GLOBALS['TSFE']->tmpl->setup['config.']['renderCharset']);
 		// END CHANGED BY RICC
-
 
 	   // Build select array.
 		if($this->displayType != 2)
@@ -275,6 +286,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 					$resultList [$arrayCounter]['datetime']	= $finalStartDate;
 					$arrayCounter ++;
 				}
+
 				if ( $row['tx_newscalendar_calendardate_end'] > 0 ) {
 					$startDate	= date( 'Y-m-d', $finalStartDate );
 					$endDate	= date( 'Y-m-d', $row['tx_newscalendar_calendardate_end']);
@@ -299,6 +311,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			if(is_array($resultList)) {
 				usort($resultList, array($this,'compare_datetime'));
 			}
+			
 			$this->resultListCount = count($resultList);
 			$this->resultList = $resultList;
 
@@ -317,39 +330,73 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		$this->previousNews = intval($this->piVars['tt_news']);
 
-		// Thanks to Максим Левицкий ( Maxim Levicky )
-		// TODO: Move to header section
+		// Thanks to Maxim Levicky
 		if ( $this->conf['calendar.']['dateChanger'] )
 		{
-			$contextScript .= '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' . "\n";
+			// TODO: Move to header section
 			$contextScript .= '<script type="text/javascript" src="'.$this->jsDateChanger.'"></script>' . "\n";
 		}
 
-		// RICC begin -> changed for TypoScript configurable context js
-		$contextScript .= '<script type="text/javascript" src="'.$this->jsContextMenu.'"></script><script type="text/javascript">' . "\n";
-		$contextScript .= "RightContext.menuTriggerEvent = '".$this->contextMenuLink."';" . "\n";
-		// RICC end
+		// Javascript argument list
+		$tipArgumentList =
+		$this->conf['tip.']['width'] . ", " .
+		"'" . $this->conf['tip.']['backgroundColor'] . "', " .
+		"'" . $this->conf['tip.']['borderColor'] . "', " .
+		$this->conf['tip.']['borderWidth'] . ", " .
+		$this->conf['tip.']['radius'] . ", " .
+		$this->conf['tip.']['padding'] . ", " .
+		$this->conf['tip.']['spikeLength'] . ", " .
+		$this->conf['tip.']['spikeGirth'] . ", " .
+		$this->conf['tip.']['shadow'] . ", " .
+		$this->conf['tip.']['shadowBlur'] . ", " .
+		$this->conf['tip.']['shadowOffsetX'] . ", " .
+		$this->conf['tip.']['shadowOffsetY'] . ", " .
+		$this->conf['tip.']['positions'] . ", " .
+		$this->conf['tip.']['fadeSpeed'];
 
-		if(is_array($this->resultList)){
-			reset($this->resultList);
-			while (list($key, $val) = each($this->resultList)) {
-				$contextScript.= $this->buildContextMenu($val['monthday']);
-			}
-		}
-		if(is_array($this->resultList)){
-			reset($this->resultList);
-			while (list($key, $val) = each($this->resultList)) {
+		$contextScript .= "\n";
+		$contextScript .= "\t" ."<!-- Newscalendar: Activate tooltip --> " . "\n\n";
+		$contextScript .= "\t" ."<script language=\"javascript\">" . "\n";
+		$contextScript .= "\t" ."jQuery.noConflict();" . "\n";
+		$contextScript .= "\t" ."jQuery( document ).ready( function() {" . "\n";
+
+		$contextScript .= "\t\t" ."newscalendar.tipSetup(" . $tipArgumentList . ");" . "\n";
+
+		$renderedDays = array();
+		if( is_array($this->resultList ) ) {
+			reset( $this->resultList );
+			while ( list( $key, $val ) = each( $this->resultList ) ) {
+
 				$dateTime = $val['monthday'];
-				$contextScript .= 'RightContext.addMenu("idMenu'.$dateTime.'", menu'.$dateTime.');';
-	
+
+				if ( ! is_array($renderedDays[ $val['monthday'] ] ) ) {
+					// Create tooltip
+					$contextScript .= "\t\t" . "newscalendar.processToolTip( " . $dateTime . ")" . "\n";
+				}
+
+				$renderedDays[ $val['monthday'] ][] = $val;
+
 				if ($this->thisDay==$dateTime && $this->thisYear==$this->calendarYear && $this->thisMonth==$this->calendarMonth){
+
 					$daysLinkArray[$dateTime] = array('idMenu'.$dateTime,'linked_today');
-				}else{
+				
+				} else {
+
 					$daysLinkArray[$dateTime] = array('idMenu'.$dateTime,'linked_day');
+
+
 				}
 			}
 		}
-		$contextScript .= "RightContext.initialize();</script>";
+
+		// Process tips
+		$contextScript_tips = $this->buildContextMenu( $renderedDays );
+
+		$contextScript .= "\t" . "});" . "\n";
+		$contextScript .= "\t" . "</script>" . "\n";
+
+		// Join Tips
+		$contextScript = $contextScript_tips . $contextScript;
 
 		/*
 		* Set tt_news to the previous id so it sticks on navigation.
@@ -426,75 +473,45 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 	 * The buildContextMenu method of the PlugIn
 	 *
 	 * @param	int		$day: The day for news
-	 * @param	varchar		$newslist: The list (comma separated value) of news to build the context menu
 	 * @return	The javascript to build menus
 	 */
-	function buildContextMenu($day)	{
-		$displayDate		= mktime(0, 0, 0, $this->calendarMonth, $day, $this->calendarYear);
-		$checkDate			= date('Y-m-d',$displayDate);
+	function buildContextMenu( $records )	{
 
-		$displayDate		= $this->convertSpecialCharacters(strftime($this->conf['calendar.']['strftime.']['contextHeader'], $displayDate));
+		$checkDay = false;
 
-		$contextMenuScript	= 'menu'.$day.' = { attributes: "x,y" ,items: [ {type:RightContext.TYPE_TEXT,	text: "'.$displayDate.'"},';
+		while ( list( $key, $dateItem ) = each( $records ) ) {
 
-		// Day array.
-		$this->dayArray = '';
-		$evalArray = $this->resultList;
-		reset($evalArray);
-		$i = 1;
-		while (list($key, $val) = each($evalArray)) {
-			$recordDate = date('Y-m-d',$val['datetime']);
-			if($recordDate == $checkDate){
-				$this->dayArray[$i] = $val;
-				$i++;
+			if ( $checkDay != $key ) {
+				
+				$checkDay = $key;
+
+				$displayDate	= mktime(0, 0, 0, $this->calendarMonth, $checkDay, $this->calendarYear);
+				$displayDate	= $this->convertSpecialCharacters(strftime($this->conf['calendar.']['strftime.']['contextHeader'], $displayDate));
+
+				// Build item tooltip
+
+				$currentMenu = "menu" . $checkDay;
+				$contextMenuScript .= "\n" . "\t". "<!-- Rendering newscalendar item " . $currentMenu . " --> \n\n";
+				$contextMenuScript .= "\t"		. "<div class='newscalendarTooltip' id='toolTipIdMenu" . $checkDay . "'>" . "\n";
+				$contextMenuScript .= "\t\t"	. "<div class='newscalendarTooltipHeader'>" . "\n";
+				$contextMenuScript .= "\t\t\t"	. $displayDate . "\n";
+				$contextMenuScript .= "\t\t"	.  "</div>" . "\n";
+				$contextMenuScript .= "\t\t"	.  "<div class='newscalendarTooltipItemContainer'>" . "\n";
+
+				while ( list( $key, $val ) = each( $dateItem ) ) {
+
+					$this->internal['currentRow'] = $val;
+					$contextMenuScript .= $this->makeListItemNormal( 'calendar' );
+
+				}
 			}
+
+			$contextMenuScript .= "\t\t" . '</div>' . "\n";
+			$contextMenuScript .= "\t" . '</div>' . "\n";
 		}
 
-		// We just process if array contains results.
-		// This is because count function return 1 when counting a empty array
-		if ( is_array( $this->dayArray ) ) {
-			$dayArrayCount = count($this->dayArray);
-			$rowCount	= $dayArrayCount;
-			$rowLine	= 1;
-			$i			= 1;
-			while($i <= $rowCount) {
-				$newsTime					= $this->xmlEntities(strftime($this->conf['calendar.']['strftime.']['contextItem'], $this->dayArray[$i]['datetime']).' - '. $this->dayArray[$i]['title']);
-				$this->piVars['tt_news']	= $this->dayArray[$i]['uid'];
-				$this->piVars['backPid']	= $this->backPage;
-	
-				// Set default news type context menu link
-				$url = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0,$this->singleView);
-				$url = t3lib_div::getIndpEnv('TYPO3_REQUEST_DIR').$url;
-	
-				// Set special news type context menu link (local page)
-				if ( $this->dayArray[$i]['type'] == 1 ) {
-					$this->pi_linkTP('dummy',$urlParameters=array(),$cache=0,$this->dayArray[$i]['page']);
-					$url = $this->cObj->lastTypoLinkUrl;
-				}
-	
-				// Set special news type context menu link (external url)
-				if ( $this->dayArray[$i]['type'] == 2 ) {
-					$pieces = explode(" ", $this->dayArray[$i]['ext_url'] );
-					$target = $pieces[1];
-					$url = $this->cObj->getTypoLink_URL( $pieces[0]);
-				}
-	
-				// Validate link if "ext:realurl" is installed.
-				// Original ideia and implementation  - Vera Spiegel.
-				// if(t3lib_extMgm::isLoaded('realurl'))
-				//	$url = 'http://'.t3lib_div::getIndpEnv('HTTP_HOST').'/'.$url;
-	
-				$contextMenuScript .= '{type:RightContext.TYPE_MENU,text:"'.str_replace('"','\"',$newsTime).'",	url:"'.$url.'", frame: "' . $target . '"  }';
-				if ($rowCount<>$rowLine) {
-					$contextMenuScript .= ','."\n";
-				}
-	
-				$i++;
-				$rowLine++;
-			}
-		}
 
-		$contextMenuScript .= ']};';
+		
 		return $contextMenuScript;
 	}
 
@@ -510,21 +527,28 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		global $LANG;
 		if ( $this->conf['calendar.']['timeZone'] )
 			date_default_timezone_set($this->conf['calendar.']['timeZone']);
+
 		$first_of_month = mktime(0,0,0,$month,1,$year);
+
 		#remember that mktime will automatically correct if invalid dates are entered
 		# for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998
 		# this provides a built in "rounding" feature to generate_calendar()
 
 		$day_names = array(); #generate all the day names according to the current locale
-		for($n=0,$t=(3+$first_day)*86400; $n<7; $n++,$t+=86400) #January 4, 1970 was a Sunday
+
+		for( $n = 0, $t = ( 3 + $first_day ) * 86400; $n < 7 ; $n++ , $t += 86400 ) { #January 4, 1970 was a Sunday
+
 			$day_names[$n] = $this->convertSpecialCharacters(ucfirst(strftime('%A',$t))); #%A means full textual day name
+		
+		}
+
 		list($month, $year, $month_name, $weekday) = explode(',',strftime('%m,%Y,%B,%w',$first_of_month));
 		$weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day
+
 		$title = $this->convertSpecialCharacters(ucfirst($month_name)).'&nbsp;'.$year;
 
 		#note that some locales don't capitalize month and day names
 		$this->listHeader = $this->convertSpecialCharacters(ucfirst(strftime($this->conf['listView.']['strftime.']['main'],$first_of_month)));
-
 
 		#Begin calendar. Uses a real <caption>. See http://diveintomark.org/archives/2002/07/03
 		@list($p, $pl) = each($pn); @list($n, $nl) = each($pn); #previous and next links, if applicable
@@ -550,13 +574,19 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 					</td>
 					<td class="columNext">'.$n.'</td>
 				</tr><tr>';
-		if($day_name_length){ #if the day names should be shown ($day_name_length > 0)
+		
+		if($day_name_length) {
+			#if the day names should be shown ($day_name_length > 0)
 			#if day_name_length is >3, the full name of the day will be printed
+
 			foreach($day_names as $d)
+
 				// ACTIVE SOLUTION Software AG
 				// Use the correct byte length for the given character count (see t3lib_cs and tslib_fe) using csConvObj.
 				$calendar .= '<th abbr="'.$this->convertSpecialCharacters($d).'">'.$this->convertSpecialCharacters($day_name_length <= 4 ? $GLOBALS['TSFE']->csConvObj->substr($GLOBALS['TSFE']->renderCharset,$d,0,$day_name_length) : $d).'</th>';
+			
 			$calendar .= "</tr>\n<tr>";
+
 		}
 	
 		if($weekday > 0) {
@@ -581,7 +611,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 				@list($link, $classes, $content) = $days[$day];
 				if(is_null($content))  $content  = (strlen($day)==1?'0'.$day:$day);
 				$calendar .= '<td>'.
-					($link ? '<div id="'.$link.'" class="'.$this->convertSpecialCharacters($classes).'" title="'.$this->pi_getLL("readmore").' '.$content.'">'.$content.'</div>' : $content).'</td>';
+					($link ? '<div id="'.$link.'" class="'.$this->convertSpecialCharacters($classes).'">'.$content.'</div>' : $content).'</td>';
 			}
 			else {
 				$newDay = (strlen($day)==1?'0'.$day:$day);
@@ -887,11 +917,20 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$wrapped=array();
 
 		$templateMarker = '###NEWSCALENDAR_LISTITEM###';
-		if ( $type == 'listinterval') {
+		switch( $type ) {
+		case 'listinterval':
 			$templateMarker = '###NEWSCALENDAR_LISTITEM_INTERVAL###';
+			break;
+		case 'calendar':
+			$templateMarker = '###NEWSCALENDAR_CALENDARITEM###';
+			break;
 		}
 
-		$template = $this->cObj->getSubpart($this->listViewTemplate, $templateMarker);
+		if ( $type == 'calendar' ) {
+			$template = $this->cObj->getSubpart( $this->calendarViewTemplate, $templateMarker );
+		} else {
+			$template = $this->cObj->getSubpart( $this->listViewTemplate, $templateMarker );
+		}
 
 		$marker['###URL###'] = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0,$this->singleView);
 		$marker['###TARGET###'] = '';
@@ -915,15 +954,22 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		}
 
 
-		$marker['###DATETIME###']= $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$this->getFieldContent('datetime')));
+		$marker['###DATETIME###'] = $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$this->getFieldContent('datetime')));
 		$marker['###TITLE###'] = $this->getFieldContent('title');
-		$marker['###IMAGE###'] = $this->makeListImageCode($this->getFieldContent('image'));
+		$marker['###IMAGE###'] = $this->makeListImageCode( $this->getFieldContent('image'), $type );
 
 		if($this->getFieldContent('short') != '') {
 			$marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($this->getFieldContent('short'), $this->conf['listView.']['subheader_stdWrap.']);
 		} else if ($this->getFieldContent('short')=='' && $this->getFieldContent('bodytext') != '') {
 			$marker['###NEWS_SUBHEADER###'] = $this->cObj->stdWrap($this->getFieldContent('bodytext'), $this->conf['listView.']['subheader_stdWrap.']);
 		}
+
+
+		// Special calendar view options
+		if ( $type == 'calendar' ) {
+			$marker['###DATETIME###'] = $this->convertSpecialCharacters(strftime($this->conf['calendar.']['strftime.']['contextItem'],$this->getFieldContent('datetime')));
+		}
+
 		// remove past events from listView if new TS property hideIfInPast is true
 		if($this->conf['listView.']['hideIfInPast'] && $this->getFieldContent('datetime') < time()) {
 			$out = '';
@@ -1004,14 +1050,25 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      * @param    string  $imgFieldContent: Content of the image field
      * @return   string  the whole img code
      */
-	function makeListImageCode ($imgFieldContent) {
-	  if (!$imgFieldContent) {
+	function makeListImageCode ( $imgFieldContent, $type = null ) {
+	  if ( ! $imgFieldContent ) {
 	    return '';
 	  } else {
-      $imagesArray = explode(",", $imgFieldContent);
-      $image = $this->uploadFolder . $imagesArray['0'];
-		  $imgCode = $this->cObj->cImage($image, $this->conf['listView.']['image.']);  
-	    return $imgCode;
+
+		$imagesArray = explode(",", $imgFieldContent);
+		$image = $this->uploadFolder . $imagesArray['0'];
+
+		if ( $type != 'calendar' ) {
+
+			$imgCode = $this->cObj->cImage($image, $this->conf['listView.']['image.']);
+		
+		} else {
+			
+			$imgCode = $this->cObj->cImage($image, $this->conf['calendar.']['image.']);
+
+
+		}
+		return $imgCode;
 	  }
 	}
 	

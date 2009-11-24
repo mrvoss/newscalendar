@@ -11,17 +11,23 @@ plugin.tx_newscalendar_pi1 {
     # cat=plugin.newscalendar//1; type=string; label= StyleSheet for ContextMenu:  CSS file for the context menu of the calendar
 	file.cssContextMenu = EXT:newscalendar/res/cssContextMenu.css
 
-	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for ContextMenu: JavaScript file for the context menu of the calendar
-	file.jsContextMenu = EXT:newscalendar/res/rightcontext_compressed.js
-
 	  # cat=plugin.newscalendar//1; type=string; label= JavaScript JQuery API: Javascript API
-	file.jsJQuery = EXT:newscalendar/res/jquery.js
+	file.jsJQuery = EXT:newscalendar/res/jquery.min.js
+
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript JQuery Tooltip API: Javascript API
+	file.jsJQueryTooltip = EXT:newscalendar/res/bt-0.9.5-rc1/jquery.bt.min.js
 
 	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for Date Changer: Advanced date changer
 	file.jsDateChanger = EXT:newscalendar/res/date_changer.js
 
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for Date Changer: Advanced date changer
+	file.jsNewscalendar = EXT:newscalendar/res/class.newscalendar.js
+
     # cat=plugin.newscalendar//2; type=string; label= Template file for the list view:  Html template file for list view
-	file.listView.listViewTemplate = EXT:newscalendar/res/listViewTemplate.html
+	file.listViewTemplate = EXT:newscalendar/res/listViewTemplate.html
+
+    # cat=plugin.newscalendar//2; type=string; label= Template file for the list view:  Html template file for list view
+	file.calendarViewTemplate = EXT:newscalendar/res/calendarViewTemplate.html
 
     # cat=plugin.newscalendar//3; type=boolean; label= Show all records: This option overwrites the local news record option "Display in calendar"
 	show.allRecords = 0

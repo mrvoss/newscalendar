@@ -93,21 +93,30 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		$this->jsNewscalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsNewscalendar']));
 
+		// Load canvas API
+		if ( $this->conf['calendar.']['loadJGoogleCanvasAPI'] ) {
+			if ( $this->conf['file.']['jsGoogleCanvasAPI'] != 'realbrowser' ) {
+				$jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsGoogleCanvasAPI']));
+				$jGoogleCanvas = '<script type="text/javascript" src="' . $jGoogleCanvas . '"></script>' .	"\n";
+			}
+		}
+
 		// Aditional file include.
 		if ( $this->conf['calendar.']['loadJQuery'] ) {
 			// TODO: Move to header section
-			$jQueryAPI = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>';
+			$jQueryAPI = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' .	"\n";
 		}
 		// Aditional file include.
 		if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
 			// TODO: Move to header section
-			$jQueryAPI2 = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>';
+			$jQueryAPI2 = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' .	"\n";
 		}
 		$GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc'] = '<link href="'	.	$this->cssCalendar		.	'" rel="stylesheet" type="text/css" />'	. "\n" .
 																		'<link href="'	.	$this->cssContextMenu	.	'" rel="stylesheet" type="text/css" />'	. "\n" .
+																		$jGoogleCanvas  .
 																		'<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n" .
-																		$jQueryAPI	.	"\n" .
-																		$jQueryAPI2	.	"\n";
+																		$jQueryAPI	.
+																		$jQueryAPI2	;
 
 		/* 
 		* Set template file for list view

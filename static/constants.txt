@@ -20,8 +20,11 @@ plugin.tx_newscalendar_pi1 {
 	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for Date Changer: Advanced date changer
 	file.jsDateChanger = EXT:newscalendar/res/date_changer.js
 
-	  # cat=plugin.newscalendar//1; type=string; label= JavaScript for Date Changer: Advanced date changer
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript Newscalendar Engine : Main client code
 	file.jsNewscalendar = EXT:newscalendar/res/class.newscalendar.js
+
+	  # cat=plugin.newscalendar//1; type=string; label= JavaScript Canvas API (IE): Google Canvas API
+	file.jsGoogleCanvasAPI = EXT:newscalendar/res/bt-0.9.5-rc1/other_libs/excanvas_r3/excanvas.js
 
     # cat=plugin.newscalendar//2; type=string; label= Template file for the list view:  Html template file for list view
 	file.listViewTemplate = EXT:newscalendar/res/listViewTemplate.html

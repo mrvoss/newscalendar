@@ -84,39 +84,35 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		// (I experienced problems with that on my systems) and it
 		// is better for strange installations (realurl; subfolder installation of t3)
 		// 2008-05-30: Added possibility to configure js-library for compressed versions etc.
-		$this->cssCalendar		= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssCalendar']));
+		$this->cssCalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssCalendar']));
 		$this->cssContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssContextMenu']));
 		$this->jsContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsContextMenu']));
-		$this->jsJQuery			= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQuery']));
+		$this->jsJQuery		= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQuery']));
 		$this->jsJQueryTooltip	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQueryTooltip']));
 		$this->jsDateChanger	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsDateChanger']));
 
 		$this->jsNewscalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsNewscalendar']));
 
-		// Load canvas API
+		// Include IE canvas API
 		if ( $this->conf['calendar.']['loadJGoogleCanvasAPI'] ) {
 			if ( $this->conf['file.']['jsGoogleCanvasAPI'] != 'realbrowser' ) {
 				$jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsGoogleCanvasAPI']));
-				$jGoogleCanvas = '<script type="text/javascript" src="' . $jGoogleCanvas . '"></script>' .	"\n";
+				$jGoogleCanvas = '<script type="text/javascript" src="' . $jGoogleCanvas . '"></script>' . "\n";
 			}
 		}
-
-		// Aditional file include.
+		// Include jQuery API
 		if ( $this->conf['calendar.']['loadJQuery'] ) {
-			// TODO: Move to header section
-			$jQueryAPI = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' .	"\n";
+			$jsJQuery = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' . "\n";
 		}
-		// Aditional file include.
+		// Include tooltip API
 		if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
-			// TODO: Move to header section
-			$jQueryAPI2 = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' .	"\n";
+			$jsJQueryTooltip = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' . "\n";
 		}
-		$GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc'] = '<link href="'	.	$this->cssCalendar		.	'" rel="stylesheet" type="text/css" />'	. "\n" .
-																		'<link href="'	.	$this->cssContextMenu	.	'" rel="stylesheet" type="text/css" />'	. "\n" .
-																		$jGoogleCanvas  .
-																		'<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n" .
-																		$jQueryAPI	.
-																		$jQueryAPI2	;
+		$GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc']
+		    =   '<link href="' . $this->cssCalendar	 . '" rel="stylesheet" type="text/css" />' . "\n" .
+			'<link href="' . $this->cssContextMenu . '" rel="stylesheet" type="text/css" />' . "\n" .
+			$jGoogleCanvas . $jsJQuery . $jsJQueryTooltip .
+			'<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n";
 
 		/* 
 		* Set template file for list view

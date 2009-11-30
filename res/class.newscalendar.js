@@ -80,10 +80,12 @@ newscalendar.processToolTip = function( toolTipID ) {
 
 		jQuery( '#idMenu' + toolTipID ).mouseover( function( event ) {
 
+			event.preventDefault();
 			jQuery( '#idMenu' + toolTipID ).btOn();
 
 			jQuery( '.newscalendar-tip-id-' + toolTipID ).bind( 'mouseleave', function( event ) {
 
+				event.preventDefault();
 				jQuery( '#idMenu' + toolTipID ).btOff();
 
 			});
@@ -98,13 +100,13 @@ newscalendar.processToolTip = function( toolTipID ) {
 				}  else if ( typeof event.relatedTarget !== "undefined" ) {
 				    checkTo = event.relatedTarget.localName;
 				}
-
+				// alert(checkTo);
 				try {
-				if ( checkTo !== 'CANVAS' ) {
+				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'canvas' ) {
 
 					jQuery( '#idMenu' + toolTipID ).btOff();
 
-				}
+				    }
 				} catch(e) {}
 
 			} );

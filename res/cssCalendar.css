@@ -37,6 +37,7 @@
 	background-color:#7e7e7e;
 	text-decoration:underline;
 	border:1px solid #333333;
+	cursor: default;
 }
 
 /* List view CSS */

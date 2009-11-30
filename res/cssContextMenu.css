@@ -27,10 +27,14 @@
 .newscalendarTooltipHeader {
 	font-weight: bold;
 	font-size: 14px;
+	padding:0px;
+	margin:0px;
 }
 
 .newscalendarTooltipItemContainer {
 	font-size: 12px;
+	padding:0px;
+	margin:0px;
 }
 
 .newscalendar-tip {
@@ -47,7 +51,7 @@
 .newsCalendar_calendarItem{
 	display: table;
 	font-size:1em;
-	padding-top:1em;
+	padding-top:5px;
 }
 .newsCalendar_calendarItem a{
 	font-weight: bold;

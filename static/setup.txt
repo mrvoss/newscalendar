@@ -1,3 +1,7 @@
+# IE8 Tip compatible
+page.headerData.1000 = HTML
+page.headerData.1000.value = <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+
 plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 

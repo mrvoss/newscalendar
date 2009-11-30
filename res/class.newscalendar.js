@@ -96,13 +96,13 @@ newscalendar.processToolTip = function( toolTipID ) {
 
 				var checkTo = 'not_defined';
 				if ( typeof event.toElement !== "undefined" ) {
-				    checkTo = event.toElement.localName ;
+				    checkTo = event.toElement.tagName ;
 				}  else if ( typeof event.relatedTarget !== "undefined" ) {
 				    checkTo = event.relatedTarget.localName;
 				}
-				// alert(checkTo);
+		
 				try {
-				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'canvas' ) {
+				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'shape' ) {
 
 					jQuery( '#idMenu' + toolTipID ).btOff();
 

@@ -23,6 +23,25 @@ plugin.tx_newscalendar_pi1 {
 
 	special.parserFunction = htmlentities
 
+
+	tip {
+	    fadeSpeed = 200
+	    width = 300
+	    backgroundColor = #EEEEEE
+	    borderColor = #CCCCCC
+	    borderWidth = 4
+	    radius = 10
+	    padding = 10
+	    spikeLength = 20
+	    spikeGirth = 20
+	    shadow = true
+	    shadowBlur = 12
+	    shadowOffsetX = 0
+	    shadowOffsetY = 5
+	    positions = [ 'top', 'right', 'bottom', 'left' ]
+	}
+
+
 	listView {
 	  subheader_stdWrap.crop = 180 | ...
 	  hideIfInPast = 0

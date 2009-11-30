@@ -562,7 +562,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->listHeader = $this->convertSpecialCharacters( ucfirst( strftime( $this->conf['listView.']['strftime.']['main'], $first_of_month ) ) );
 
 		#Begin calendar. Uses a real <caption>. See http://diveintomark.org/archives/2002/07/03
-		@list($p, $pl) = each($pn); @list($n, $nl) = each($pn); #previous and next links, if applicable
+		@list( $p, $pl ) = each( $pn ); @list($n, $nl) = each( $pn ); #previous and next links, if applicable
 		// Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
 		// the site will not be cached and the month navigator will work fine
 		// "Markus Waskowski" growing-media.de
@@ -573,8 +573,21 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			$cacheAdd = '&no_cache=1';
 		}
 
-		if( $p ) $p = ( $pl ? '<a href="'.$this->convertSpecialCharacters($pl) . $cacheAdd . '" title="'.$this->pi_getLL("calPrev").'">'.$p.'</a>' : $p);
-		if( $n ) $n = ( $nl ? '<a href="'.$this->convertSpecialCharacters($nl) . $cacheAdd . '" title="'.$this->pi_getLL("calNext").'">'.$n.'</a>' : $n);
+		$previousImage  = $p;
+		$nextImage	= $n;
+		// Render navigation links as images
+		if ( $this->conf['calendar.']['renderNavigationAsImages'] ) {
+
+		    $arrowLeft = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowLeft'] ) );
+		    $arrowRight = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowRight'] ) );
+
+		    $previousImage = $this->cObj->cImage( $arrowLeft, $this->conf['calendar.']['imageArrows.']);
+		    $nextImage = $this->cObj->cImage( $arrowRight, $this->conf['calendar.']['imageArrows.']);
+		}
+
+		if( $p ) $p = ( $pl ? '<a href="'.$this->convertSpecialCharacters($pl) . $cacheAdd . '" title="'.$this->pi_getLL("calPrev").'">' . $previousImage . '</a>' : $previousImage);
+		if( $n ) $n = ( $nl ? '<a href="'.$this->convertSpecialCharacters($nl) . $cacheAdd . '" title="'.$this->pi_getLL("calNext").'">' . $nextImage . '</a>' : $nextImage);
+
 		// Thanks to Patrick Gaumond and his team for the fix on month display.
 		$calendar = '<table class="calendar-table" cellpadding="0" cellspacing="0">' . "\n" .
 			    "\t\t\t"	    . '<tr>' . "\n" .

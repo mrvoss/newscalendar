@@ -18,11 +18,12 @@ plugin.tx_newscalendar_pi1 {
 	file.listViewTemplate = {$plugin.tx_newscalendar_pi1.file.listViewTemplate}
 	file.calendarViewTemplate = {$plugin.tx_newscalendar_pi1.file.calendarViewTemplate}
 
+	file.arrowLeft = {$plugin.tx_newscalendar_pi1.file.arrowLeft}
+	file.arrowRight = {$plugin.tx_newscalendar_pi1.file.arrowRight}
 
 	show.allRecords = {$plugin.tx_newscalendar_pi1.show.allRecords}
 
 	special.parserFunction = htmlentities
-
 
 	tip {
 	    fadeSpeed = 200
@@ -68,6 +69,11 @@ plugin.tx_newscalendar_pi1 {
 	  image {
 	    file.maxW = 50
             file.maxH = 50
+	  }
+	  renderNavigationAsImages = 0
+	  imageArrows {
+	    file.maxW = 32
+            file.maxH = 32
 	  }
 	}
 }

@@ -95,10 +95,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		// Include IE canvas API
 		if ( $this->conf['calendar.']['loadJGoogleCanvasAPI'] ) {
-			if ( $this->conf['file.']['jsGoogleCanvasAPI'] != 'realbrowser' ) {
-				$jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsGoogleCanvasAPI']));
-				$jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
-			}
+		    $jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsIEGoogleCanvasAPI']));
+		    $jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
 		}
 		// Include jQuery API
 		if ( $this->conf['calendar.']['loadJQuery'] ) {
@@ -109,10 +107,12 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			$jsJQueryTooltip = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' . "\n";
 		}
 		$GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc']
-		    =   '<link href="' . $this->cssCalendar	 . '" rel="stylesheet" type="text/css" />' . "\n" .
+		    =   "\n" . "<!-- EXT:newscalendar: Javascript and CSS include files : START --> " . "\n" .
+			'<link href="' . $this->cssCalendar	 . '" rel="stylesheet" type="text/css" />' . "\n" .
 			'<link href="' . $this->cssContextMenu . '" rel="stylesheet" type="text/css" />' . "\n" .
 			$jGoogleCanvas . $jsJQuery . $jsJQueryTooltip .
-			'<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n";
+			'<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n" .
+			'<!-- EXT:newscalendar: Javascript and CSS include files : END --> ' . "\n";
 
 		/* 
 		* Set template file for list view
@@ -376,7 +376,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 				if ( ! is_array($renderedDays[ $val['monthday'] ] ) ) {
 					// Create tooltip
-					$contextScript .= "\t\t" . "newscalendar.processToolTip( " . $dateTime . ")" . "\n";
+					$contextScript .= "\t\t" . "newscalendar.processToolTip( " . $dateTime . " )" . "\n";
 				}
 
 				$renderedDays[ $val['monthday'] ][] = $val;

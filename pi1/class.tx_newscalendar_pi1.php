@@ -530,30 +530,34 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		* Add language add-ons for calendar
 		*/
 		global $LANG;
+
+		// Set timezone manually
 		if ( $this->conf['calendar.']['timeZone'] )
-			date_default_timezone_set($this->conf['calendar.']['timeZone']);
+			date_default_timezone_set( $this->conf['calendar.']['timeZone'] );
 
-		$first_of_month = mktime(0,0,0,$month,1,$year);
+		$first_of_month = mktime( 0, 0, 0, $month, 1, $year );
 
-		#remember that mktime will automatically correct if invalid dates are entered
+		# remember that mktime will automatically correct if invalid dates are entered
 		# for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998
 		# this provides a built in "rounding" feature to generate_calendar()
 
 		$day_names = array(); #generate all the day names according to the current locale
 
-		for( $n = 0, $t = ( 3 + $first_day ) * 86400; $n < 7 ; $n++ , $t += 86400 ) { #January 4, 1970 was a Sunday
+		#January 4, 1970 was a Sunday
+		for( $n = 0, $t = ( 3 + $first_day ) * 86400; $n < 7 ; $n++ , $t += 86400 ) { 
 
-			$day_names[$n] = $this->convertSpecialCharacters(ucfirst(strftime('%A',$t))); #%A means full textual day name
+			#%A means full textual day name
+			$day_names[$n] = ucfirst( strftime( '%A', $t) );
 		
 		}
 
 		list($month, $year, $month_name, $weekday) = explode(',',strftime('%m,%Y,%B,%w',$first_of_month));
 		$weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day
 
-		$title = $this->convertSpecialCharacters(ucfirst($month_name)).'&nbsp;'.$year;
+		$title = $this->convertSpecialCharacters( ucfirst( $month_name ) ) . '&nbsp;' . $year;
 
 		#note that some locales don't capitalize month and day names
-		$this->listHeader = $this->convertSpecialCharacters(ucfirst(strftime($this->conf['listView.']['strftime.']['main'],$first_of_month)));
+		$this->listHeader = $this->convertSpecialCharacters( ucfirst( strftime( $this->conf['listView.']['strftime.']['main'], $first_of_month ) ) );
 
 		#Begin calendar. Uses a real <caption>. See http://diveintomark.org/archives/2002/07/03
 		@list($p, $pl) = each($pn); @list($n, $nl) = each($pn); #previous and next links, if applicable
@@ -563,44 +567,43 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		// Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
 		$cacheAdd = '';
-		if ( $this->conf['calendar.']['addNoCache2Navigation'] )
-		{
+		if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
 			$cacheAdd = '&no_cache=1';
 		}
 
-		if($p) $p = ($pl ? '<a href="'.$this->convertSpecialCharacters($pl) . $cacheAdd . '" title="'.$this->pi_getLL("calPrev").'">'.$p.'</a>' : $p);
-		if($n) $n = ($nl ? '<a href="'.$this->convertSpecialCharacters($nl) . $cacheAdd . '" title="'.$this->pi_getLL("calNext").'">'.$n.'</a>' : $n);
+		if( $p ) $p = ( $pl ? '<a href="'.$this->convertSpecialCharacters($pl) . $cacheAdd . '" title="'.$this->pi_getLL("calPrev").'">'.$p.'</a>' : $p);
+		if( $n ) $n = ( $nl ? '<a href="'.$this->convertSpecialCharacters($nl) . $cacheAdd . '" title="'.$this->pi_getLL("calNext").'">'.$n.'</a>' : $n);
 		// Thanks to Patrick Gaumond and his team for the fix on month display.
-		$calendar = '<table class="calendar-table" cellpadding="0" cellspacing="0">'."\n".
-				'<tr>'."\n".'
-					<td class="columPrevious">'.$p.'</td>
-					<td colspan="5" class="columYear">'."\n".'
-						'.($month_href ? '<a href="'.$this->convertSpecialCharacters($month_href).'" title="'.$this->pi_getLL("calYear").' - '.$title.'">'.$this->listHeader.'</a>' : $this->listHeader).'
-					</td>
-					<td class="columNext">'.$n.'</td>
-				</tr><tr>';
+		$calendar = '<table class="calendar-table" cellpadding="0" cellspacing="0">' . "\n" .
+			    "\t\t\t"	    . '<tr>' . "\n" .
+			    "\t\t\t\t"	    . '<td class="columPrevious">' . $p . '</td>' . "\n" .
+			    "\t\t\t\t"	    . '<td colspan="5" class="columYear">' . "\n" .
+			    "\t\t\t\t\t"    . ( $month_href ? '<a href="' . $this->convertSpecialCharacters( $month_href ) . '" title="' . $this->pi_getLL( "calYear" ) . ' - ' . $title . '">' . $this->listHeader . '</a>' : $this->listHeader ) . "\n" .
+			    "\t\t\t\t"	    . '</td>' . "\n" .
+			    "\t\t\t\t"	    . '<td class="columNext">' . $n . '</td>' . "\n" .
+			    "\t\t\t"	    . '</tr>' . "\n" .
+			    "\t\t\t"	    . '<tr>' . "\n";
 		
-		if($day_name_length) {
-			#if the day names should be shown ($day_name_length > 0)
-			#if day_name_length is >3, the full name of the day will be printed
-
-			foreach($day_names as $d)
-
-				// ACTIVE SOLUTION Software AG
-				// Use the correct byte length for the given character count (see t3lib_cs and tslib_fe) using csConvObj.
-				$calendar .= '<th abbr="'.$this->convertSpecialCharacters($d).'">'.$this->convertSpecialCharacters($day_name_length <= 4 ? $GLOBALS['TSFE']->csConvObj->substr($GLOBALS['TSFE']->renderCharset,$d,0,$day_name_length) : $d).'</th>';
-			
-			$calendar .= "</tr>\n<tr>";
-
+		foreach( $day_names as $d ) {
+			// ACTIVE SOLUTION Software AG
+			// Use the correct byte length for the given character count (see t3lib_cs and tslib_fe) using csConvObj.
+			$convertDay = ( $day_name_length <= 4 ? $GLOBALS['TSFE']->csConvObj->substr( $GLOBALS['TSFE']->renderCharset, $d, 0, $day_name_length ) : $d );
+			$calendar .= "\t\t\t\t" . '<th abbr="'.$this->convertSpecialCharacters($d).'">'.$this->convertSpecialCharacters( $convertDay ) . '</th>' . "\n";
 		}
-	
+
+		$calendar .= "\t\t\t" . '</tr>' . "\n";
+		$calendar .= "\t\t\t" . '<tr>'	. "\n";
+
 		if($weekday > 0) {
-		  $calendar .= '<td colspan="'.$weekday.'">&nbsp;</td>'; #initial 'empty' days
+		  $calendar .= "\t\t\t\t" . '<td colspan="'.$weekday.'">&nbsp;</td>' . "\n"; #initial 'empty' days
 		}
-		for($day=1,$days_in_month=date('t',$first_of_month); $day<=$days_in_month; $day++,$weekday++){
-			if($weekday == 7){
+		
+		for( $day=1, $days_in_month=date('t',$first_of_month); $day<=$days_in_month; $day++,$weekday++){
+			
+			if( $weekday == 7 ) {
 				$weekday   = 0; #start a new week
-				$calendar .= "</tr>\n<tr>";
+				$calendar .= "\t\t\t" . '</tr>' . "\n";
+				$calendar .= "\t\t\t" . '<tr>' . "\n";
 			}
 
 			// Changed render of link for compliance with context menu 
@@ -615,35 +618,33 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			if(isset($days[$day]) and is_array($days[$day]) && $makeLink == 1) {
 				@list($link, $classes, $content) = $days[$day];
 				if(is_null($content))  $content  = (strlen($day)==1?'0'.$day:$day);
-				$calendar .= '<td>'.
-					($link ? '<div id="'.$link.'" class="'.$this->convertSpecialCharacters($classes).'">'.$content.'</div>' : $content).'</td>';
+				$calendar .= "\t\t\t\t" . '<td>' .
+					( $link ? '<div id="'.$link.'" class="'.$this->convertSpecialCharacters($classes).'">' . $content . '</div>' : $content) . '</td>' . "\n";
 			}
 			else {
 				$newDay = (strlen($day)==1?'0'.$day:$day);
 
 				if ($this->thisDay==$newDay && $this->thisYear==$year && $this->thisMonth==$month){
-					$calendar .= '<td><div class="linked_today_nolink" >'.$newDay.'</div></td>';
+					$calendar .= "\t\t\t\t" . '<td><div class="linked_today_nolink" >'.$newDay.'</div></td>' . "\n";
 				}else{
-					$calendar .= "<td>$newDay</td>";
+					$calendar .= "\t\t\t\t" . '<td>' . $newDay . '</td>' . "\n";
 				}
 			}
 		}
-		if($weekday != 7) $calendar .= '<td colspan="'.(7-$weekday).'">&nbsp;</td>'; #remaining "empty" days
+		if( $weekday != 7 ) $calendar .= "\t\t\t\t" . '<td colspan="'.(7-$weekday).'">&nbsp;</td>' . "\n"; #remaining "empty" days
 	
-		if ($this->monthLinkDisplay ==1){
-			$calendar .='
-				</tr>
-				<tr>
-					<td colspan="7"  class="bottomMonthLink">';
-			$calendar .= '
-						<a href="'.$this->convertSpecialCharacters($month_href).'" title="'.$this->pi_getLL("calYear").' - '.$title.'">'.$this->pi_getLL("calYear").'</a>
-					</td>
-				</tr>';
+		if ( $this->monthLinkDisplay == 1 ) {
+			$calendar .= "\t\t\t"	    . '</tr>' . "\n";
+			$calendar .= "\t\t\t"	    . '<tr>' . "\n";
+			$calendar .= "\t\t\t\t"	    . '<td colspan="7" class="bottomMonthLink">' ."\n";
+			$calendar .= "\t\t\t\t\t"   . '<a href="' . $this->convertSpecialCharacters( $month_href ) . '" title="' . $this->pi_getLL( "calYear" ) . ' - ' . $title.'">' . $this->pi_getLL( "calYear" ) . '</a>' . "\n";
+			$calendar .= "\t\t\t\t"	    . '</td>' . "\n";
+			$calendar .= "\t\t\t"	    . '</tr>' . "\n";
 		} else {
-			$calendar .='</tr>';
+			$calendar .= "\t\t\t"	    . '</tr>' . "\n";
 		}
 
-		return $calendar."</table>\n";
+		return $calendar . "\t\t" . '</table>' . "\n";
 	}
 
 

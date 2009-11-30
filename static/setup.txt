@@ -9,6 +9,10 @@ plugin.tx_newscalendar_pi1.file.jsGoogleCanvasAPI = {$plugin.tx_newscalendar_pi1
 plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 
+	render {
+	    dayNameLength = 3
+	}
+
 	file.cssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
 	file.cssContextMenu = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
 	file.jsJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
@@ -21,24 +25,7 @@ plugin.tx_newscalendar_pi1 {
 
 	show.allRecords = {$plugin.tx_newscalendar_pi1.show.allRecords}
 
-	special.parserFunction = htmlspecialchars
-
-	tip {
-		fadeSpeed = 200
-		width = 300
-		backgroundColor = #EEEEEE
-		borderColor = #CCCCCC
-		borderWidth = 4
-		radius = 10
-		padding = 10
-		spikeLength = 20
-		spikeGirth = 20
-		shadow = true
-	    shadowBlur = 12
-		shadowOffsetX = 0
-		shadowOffsetY = 5
-		positions = [ 'top', 'right', 'bottom', 'left' ]
-	}
+	special.parserFunction = htmlentities
 
 	listView {
 	  subheader_stdWrap.crop = 180 | ...
@@ -49,7 +36,7 @@ plugin.tx_newscalendar_pi1 {
 	  strftime.item = %H:%M
 	  image {
 	    file.maxW = 136
-        file.maxH = 150
+	    file.maxH = 150
 	  }
 	}
 	calendar {
@@ -59,13 +46,13 @@ plugin.tx_newscalendar_pi1 {
 	  dateChanger = 0
 	  addNoCache2Navigation = 1
 	  hideIfInPast = 0
-	  strftime.contextHeader = %A, %Y-%m-%d
+	  strftime.contextHeader = %A %d, %B %Y
 	  strftime.contextItem = %H:%M
 	  startWeekDay = {$plugin.tx_newscalendar_pi1.calendar.startWeekDay}
 	  timeZone = {$plugin.tx_newscalendar_pi1.calendar.timeZone}
 	  image {
 	    file.maxW = 50
-        file.maxH = 50
+            file.maxH = 50
 	  }
 	}
 }

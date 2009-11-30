@@ -22,7 +22,7 @@
 		<languageKey index="pt" type="array">
 			<label index="tt_content.list_type_pi1">Calendário de notícias:</label>
 			<label index="tt_news.tx_newscalendar_state">Mostrar no calendário:</label>
-			<label index="tt_news.tx_newscalendar_calendardate">Data de início(sobrepõem-se a "Date/Time"):</label>
+			<label index="tt_news.tx_newscalendar_calendardate">Data de início(sobrepõem-se a "Data/Hora"):</label>
 			<label index="tt_news.tx_newscalendar_calendardate_end">Data de fim (se preenchido o registo é apresentado entre a data de início e a data introduzida):</label>
 		</languageKey>
 		<languageKey index="fr" type="array">

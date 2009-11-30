@@ -1,11 +1,3 @@
-# Special Canvas API for the "special IE" mainstream browser
-# The user uses another browser, lets rock
-plugin.tx_newscalendar_pi1.file.jsGoogleCanvasAPI = realbrowser
-
-[browser = msie]
-plugin.tx_newscalendar_pi1.file.jsGoogleCanvasAPI = {$plugin.tx_newscalendar_pi1.file.jsGoogleCanvasAPI}
-[end]
-
 plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 
@@ -15,10 +7,14 @@ plugin.tx_newscalendar_pi1 {
 
 	file.cssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
 	file.cssContextMenu = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
+
 	file.jsJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
 	file.jsJQueryTooltip = {$plugin.tx_newscalendar_pi1.file.jsJQueryTooltip}
+	file.jsIEGoogleCanvasAPI = {$plugin.tx_newscalendar_pi1.file.jsIEGoogleCanvasAPI}
+
 	file.jsDateChanger = {$plugin.tx_newscalendar_pi1.file.jsDateChanger}
 	file.jsNewscalendar = {$plugin.tx_newscalendar_pi1.file.jsNewscalendar}
+
 	file.listViewTemplate = {$plugin.tx_newscalendar_pi1.file.listViewTemplate}
 	file.calendarViewTemplate = {$plugin.tx_newscalendar_pi1.file.calendarViewTemplate}
 

@@ -97,7 +97,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		if ( $this->conf['calendar.']['loadJGoogleCanvasAPI'] ) {
 			if ( $this->conf['file.']['jsGoogleCanvasAPI'] != 'realbrowser' ) {
 				$jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsGoogleCanvasAPI']));
-				$jGoogleCanvas = '<script type="text/javascript" src="' . $jGoogleCanvas . '"></script>' . "\n";
+				$jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
 			}
 		}
 		// Include jQuery API
@@ -198,7 +198,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 	// +---------------------------------------------------------
 	// | Calendar array 
 	// +---------------------------------------------------------
-	function buildCalendarArray($mode){
+	function buildCalendarArray( $mode ) {
 		// Define the list of pages to search for recently changed content (999 depth level).
 		$this->search_list = $this->pi_getPidList($this->menuPid,$this->recursion);
 
@@ -258,7 +258,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		$this->globalRes = $res;
 
-		if($mode == 1){
+		if( $mode == 1 ) {
 			// Fill array with result set.
 			// CHANGED BY RICC FROM '1' to '0'
 			$arrayCounter = 0;
@@ -488,31 +488,33 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 			if ( $checkDay != $key ) {
 				
-				$checkDay = $key;
+			    $checkDay = $key;
 
-				$displayDate	= mktime(0, 0, 0, $this->calendarMonth, $checkDay, $this->calendarYear);
-				$displayDate	= $this->convertSpecialCharacters(strftime($this->conf['calendar.']['strftime.']['contextHeader'], $displayDate));
+			    $displayDate	= mktime(0, 0, 0, $this->calendarMonth, $checkDay, $this->calendarYear);
+			    $displayDate	= $this->convertSpecialCharacters(strftime($this->conf['calendar.']['strftime.']['contextHeader'], $displayDate));
 
-				// Build item tooltip
+			    // Build item tooltip
 
-				$currentMenu = "menu" . $checkDay;
-				$contextMenuScript .= "\n" . "\t". "<!-- Rendering newscalendar item " . $currentMenu . " --> \n\n";
-				$contextMenuScript .= "\t"		. "<div class='newscalendarTooltip' id='toolTipIdMenu" . $checkDay . "'>" . "\n";
-				$contextMenuScript .= "\t\t"	. "<div class='newscalendarTooltipHeader'>" . "\n";
-				$contextMenuScript .= "\t\t\t"	. $displayDate . "\n";
-				$contextMenuScript .= "\t\t"	.  "</div>" . "\n";
-				$contextMenuScript .= "\t\t"	.  "<div class='newscalendarTooltipItemContainer'>" . "\n";
+			    $currentMenu = "menu" . $checkDay;
+			    $contextMenuScript .= "\n" . "\t". "<!-- Rendering newscalendar item " . $currentMenu . " --> \n\n";
+			    $contextMenuScript .= "\t"		. "<div class='newscalendarTooltip' id='toolTipIdMenu" . $checkDay . "'>" . "\n";
+			    $contextMenuScript .= "\t\t"	. "<div class='newscalendarTooltipHeader'>" . "\n";
+			    $contextMenuScript .= "\t\t\t"	. $displayDate . "\n";
+			    $contextMenuScript .= "\t\t"	.  "</div>" . "\n";
+			    $contextMenuScript .= "\t\t"	.  "<div class='newscalendarTooltipItemContainer'>" . "\n";
 
-				while ( list( $key, $val ) = each( $dateItem ) ) {
+			    while ( list( $key, $val ) = each( $dateItem ) ) {
 
-					$this->internal['currentRow'] = $val;
-					$contextMenuScript .= $this->makeListItemNormal( 'calendar' );
+				    $this->internal['currentRow'] = $val;
+				    $contextMenuScript .= $this->makeListItemNormal( 'calendar' );
 
-				}
+			    }
+
+			    $contextMenuScript .= "\t\t" . '</div>' . "\n";
+			    $contextMenuScript .= "\t" . '</div>' . "\n";
+
 			}
 
-			$contextMenuScript .= "\t\t" . '</div>' . "\n";
-			$contextMenuScript .= "\t" . '</div>' . "\n";
 		}
 
 

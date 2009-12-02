@@ -74,7 +74,7 @@ plugin.tx_newscalendar_pi1 {
 	    file.maxW = 50
             file.maxH = 50
 	  }
-	  renderNavigationAsImages = 0
+	  renderNavigationAsImages = 1
 	  imageArrows {
 	    file.maxW = 32
             file.maxH = 32

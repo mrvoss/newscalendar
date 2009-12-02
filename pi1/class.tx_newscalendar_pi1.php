@@ -273,6 +273,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 				$resultList [$arrayCounter]['image'] = $row['image'];
 				$resultList [$arrayCounter]['short'] = $row['short'];
 
+				$auxiliar_data = $resultList;
+
 				// get the translated record if the content language is not the default language
 				if ($GLOBALS['TSFE']->sys_language_content) {
 					// $OLmode = ($this->sys_language_mode == 'strict'?'hideNonTranslated':'');
@@ -284,7 +286,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 				$finalStartDate = ( $row['tx_newscalendar_calendardate'] ? $row['tx_newscalendar_calendardate'] : $row['datetime'] );
 
 				if ( $this->calendarYear == date( 'Y', $finalStartDate ) && $this->calendarMonth == date( 'n', $finalStartDate ) ) {
-					$resultList [$arrayCounter]['uid']		= $row['uid'];
+					$resultList [$arrayCounter]['uid']	= $row['uid'];
 					$resultList [$arrayCounter]['title']	= $row['title'];
 					$resultList [$arrayCounter]['monthday']	= date('j', $finalStartDate );
 					$resultList [$arrayCounter]['enddate']	= $row['tx_newscalendar_calendardate_end'];
@@ -294,17 +296,26 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 				if ( $row['tx_newscalendar_calendardate_end'] > 0 ) {
 					$startDate	= date( 'Y-m-d', $finalStartDate );
-					$endDate	= date( 'Y-m-d', $row['tx_newscalendar_calendardate_end']);
-					$daysBetween = $this->GetDays( $startDate, $endDate, $row['uid'] );
-					while($date = each( $daysBetween )) {
+					$endDate	= date( 'Y-m-d', $row['tx_newscalendar_calendardate_end'] );
+					$daysBetween	= $this->GetDays( $startDate, $endDate, $row['uid'] );
+					while( $date = each( $daysBetween ) ) {
 						if ( $startDate != $date[1] ) {
 							$timeDate = strtotime( $date[1] . date(' H:i', $finalStartDate ) );
 							if ( $this->calendarYear == date( 'Y', $timeDate ) && $this->calendarMonth == date( 'n', $timeDate ) ) {
-								$resultList [$arrayCounter]['uid']		= $row['uid'];
+
+								$resultList [$arrayCounter]['uid']	= $row['uid'];
 								$resultList [$arrayCounter]['title']	= $row['title'];
 								$resultList [$arrayCounter]['monthday']	= date('j',$timeDate);
 								$resultList [$arrayCounter]['enddate']	= 0;
 								$resultList [$arrayCounter]['datetime']	= $timeDate;
+
+								$resultList [$arrayCounter]['type']	= $row['type'];
+								$resultList [$arrayCounter]['page']	= $row['page'];
+								$resultList [$arrayCounter]['ext_url']	= $row['ext_url'];
+
+								$resultList [$arrayCounter]['image']	= $row['image'];
+								$resultList [$arrayCounter]['short']	= $row['short'];
+
 								$arrayCounter ++;
 							}
 						}
@@ -368,6 +379,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$contextScript .= "\t\t" ."newscalendar.tipSetup(" . $tipArgumentList . ");" . "\n";
 
 		$renderedDays = array();
+
 		if( is_array($this->resultList ) ) {
 			reset( $this->resultList );
 			while ( list( $key, $val ) = each( $this->resultList ) ) {
@@ -1039,29 +1051,17 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         return $this->pi_linkTP_keepPIvars($this->getFieldHeader($fN),array('sort'=>$fN.':'.($this->internal['descFlag']?0:1)));
     }
 
-/* CHANGED BY RICC begin
-	function convertSpecialCharacters($string){
-		switch ($this->parserFunction) {
-			case 'htmlspecialchars':
-				return htmlspecialchars($string, ENT_QUOTES, 'utf-8');
-			case 'skip':
-				return $string;
-			default:
-				return htmlentities($string, ENT_QUOTES, 'utf-8');
-		}
+
+    function convertSpecialCharacters($string) {
+	switch ($this->parserFunction) {
+	    case 'htmlspecialchars':
+		return htmlspecialchars($string, ENT_COMPAT, $GLOBALS['TSFE']->tmpl->setup['config.']['renderCharset']);
+	    case 'skip':
+		return $string;
+	    default:
+		return htmlentities($string, ENT_QUOTES, $GLOBALS['TSFE']->tmpl->setup['config.']['renderCharset']);
 	}
-*/
-	function convertSpecialCharacters($string) {
-		switch ($this->parserFunction) {
- 			case 'htmlspecialchars':
- 				return htmlspecialchars($string, ENT_COMPAT, $GLOBALS['TSFE']->tmpl->setup['config.']['renderCharset']);
- 			case 'skip':
- 				return $string;
- 			default:
- 				return htmlentities($string, ENT_QUOTES, $GLOBALS['TSFE']->tmpl->setup['config.']['renderCharset']);
- 		}
- 	}
-// CHANGED BY RICC end
+    }
 	
 	// RICC begin
 	// get the image html code via t3 api funcs.

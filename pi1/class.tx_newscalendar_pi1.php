@@ -373,7 +373,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$contextScript .= "\n";
 		$contextScript .= "\t" ."<!-- Newscalendar: Activate tooltip --> " . "\n\n";
 		$contextScript .= "\t" ."<script language=\"javascript\">" . "\n";
-		$contextScript .= "\t" ."jQuery.noConflict();" . "\n";
 		$contextScript .= "\t" ."jQuery( document ).ready( function() {" . "\n";
 
 		$contextScript .= "\t\t" ."newscalendar.tipSetup(" . $tipArgumentList . ");" . "\n";

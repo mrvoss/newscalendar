@@ -81,12 +81,17 @@ newscalendar.processToolTip = function( toolTipID ) {
 		jQuery( '#idMenu' + toolTipID ).mouseover( function( event ) {
 
 			event.preventDefault();
+			var currentSelectStarter = this;
+
+			currentSelectStarter.addClass('newscalendar-tip-selector');
+
 			jQuery( '#idMenu' + toolTipID ).btOn();
 
 			jQuery( '.newscalendar-tip-id-' + toolTipID ).bind( 'mouseleave', function( event ) {
 
 				event.preventDefault();
 				jQuery( '#idMenu' + toolTipID ).btOff();
+				currentSelectStarter.removeClass('newscalendar-tip-selector');
 
 			});
 
@@ -105,6 +110,7 @@ newscalendar.processToolTip = function( toolTipID ) {
 				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'shape' ) {
 
 					jQuery( '#idMenu' + toolTipID ).btOff();
+					currentSelectStarter.removeClass('newscalendar-tip-selector');
 
 				    }
 				} catch(e) {}

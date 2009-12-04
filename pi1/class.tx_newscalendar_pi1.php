@@ -36,7 +36,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 	var $prefixId		= 'tx_ttnews';		// Same as class name
 	var $scriptRelPath	= 'pi1/class.tx_newscalendar_pi1.php';	// Path to this script relative to the extension dir.
-	var $extKey			= 'newscalendar';	// The extension key.
+	var $extKey		= 'newscalendar';	// The extension key.
 	var $pi_checkCHash	= true;
 	var $resultList;
 	var $resultListCount;
@@ -60,7 +60,17 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+
+		// Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
+		// the site will not be cached and the month navigator will work fine
+		// "Markus Waskowski" growing-media.de
+
+		// Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
+		$this->cacheAdd = 0;
+		if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
+			$this->cacheAdd = 1;
+		}
 
 		/*
 		* Retrieve day vars
@@ -414,17 +424,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		// Join Tips
 		$contextScript = $contextScript_tips . $contextScript;
 
-
-		// Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
-		// the site will not be cached and the month navigator will work fine
-		// "Markus Waskowski" growing-media.de
-
-		// Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
-		$cacheAdd = 0;
-		if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
-			$cacheAdd = 1;
-		}
-
 		/*
 		* Set tt_news to the previous id so it sticks on navigation.
 		*/
@@ -445,7 +444,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		/* 
 		* Build previous link  
 		*/
-		$this->linkPrev = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$cacheAdd,$clearAnyway=0);
+		$this->linkPrev = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$this->cacheAdd,$clearAnyway=0);
 
 		/*
 		* Set date values for next link.
@@ -456,7 +455,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		/* 
 		* Build next link  
 		*/
-		$this->linkNext = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$cacheAdd,$clearAnyway=0);
+		$this->linkNext = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$this->cacheAdd,$clearAnyway=0);
 
 		/*
 		* Reset date values. 
@@ -967,7 +966,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			$template = $this->cObj->getSubpart( $this->listViewTemplate, $templateMarker );
 		}
 
-		$marker['###URL###'] = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0,$this->singleView);
+		$marker['###URL###'] = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$this->cacheAdd,$clearAnyway=0,$this->singleView);
 		$marker['###TARGET###'] = '';
 		$marker['###IMAGE###'] = '';
 		$marker['###NEWS_SUBHEADER###'] = '';
@@ -975,7 +974,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		// Set special news type context menu link (local page)
 		if ( $this->getFieldContent('type') == 1 ) {
-			$this->pi_linkTP('dummy',$urlParameters=array(),$cache=0, $this->getFieldContent('page'));
+			$this->pi_linkTP('dummy',$urlParameters=array(),$cache=$this->cacheAdd, $this->getFieldContent('page'));
 			$marker['###URL###'] = $this->cObj->lastTypoLinkUrl;
 		}
 

@@ -599,8 +599,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		    $nextImage = $this->cObj->cImage( $arrowRight, $this->conf['calendar.']['imageArrows.']);
 		}
 
-		if( $p ) $p = ( $pl ? '<a href="'.$this->convertSpecialCharacters($pl) . $cacheAdd . '" title="'.$this->pi_getLL("calPrev").'">' . $previousImage . '</a>' : $previousImage);
-		if( $n ) $n = ( $nl ? '<a href="'.$this->convertSpecialCharacters($nl) . $cacheAdd . '" title="'.$this->pi_getLL("calNext").'">' . $nextImage . '</a>' : $nextImage);
+		if( $p ) $p = ( $pl ? '<a href="' . $pl . '" title="'.$this->pi_getLL("calPrev").'">' . $previousImage . '</a>' : $previousImage);
+		if( $n ) $n = ( $nl ? '<a href="' . $nl . '" title="'.$this->pi_getLL("calNext").'">' . $nextImage . '</a>' : $nextImage);
 
 		// Thanks to Patrick Gaumond and his team for the fix on month display.
 		$calendar = '<table class="calendar-table" cellpadding="0" cellspacing="0">' . "\n" .

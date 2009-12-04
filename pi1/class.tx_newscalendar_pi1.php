@@ -414,6 +414,17 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		// Join Tips
 		$contextScript = $contextScript_tips . $contextScript;
 
+
+		// Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
+		// the site will not be cached and the month navigator will work fine
+		// "Markus Waskowski" growing-media.de
+
+		// Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
+		$cacheAdd = 0;
+		if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
+			$cacheAdd = 1;
+		}
+
 		/*
 		* Set tt_news to the previous id so it sticks on navigation.
 		*/
@@ -434,7 +445,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		/* 
 		* Build previous link  
 		*/
-		$this->linkPrev = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0);
+		$this->linkPrev = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$cacheAdd,$clearAnyway=0);
 
 		/*
 		* Set date values for next link.
@@ -445,7 +456,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		/* 
 		* Build next link  
 		*/
-		$this->linkNext = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=0,$clearAnyway=0);
+		$this->linkNext = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$cacheAdd,$clearAnyway=0);
 
 		/*
 		* Reset date values. 
@@ -574,18 +585,10 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		#Begin calendar. Uses a real <caption>. See http://diveintomark.org/archives/2002/07/03
 		@list( $p, $pl ) = each( $pn ); @list($n, $nl) = each( $pn ); #previous and next links, if applicable
-		// Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
-		// the site will not be cached and the month navigator will work fine
-		// "Markus Waskowski" growing-media.de
-
-		// Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
-		$cacheAdd = '';
-		if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
-			$cacheAdd = '&no_cache=1';
-		}
 
 		$previousImage  = $p;
 		$nextImage	= $n;
+
 		// Render navigation links as images
 		if ( $this->conf['calendar.']['renderNavigationAsImages'] ) {
 

@@ -1,4 +1,9 @@
 Changelog
+2009-12-04
+http://forge.typo3.org/issues/show/5585
+http://forge.typo3.org/issues/show/5578
+http://forge.typo3.org/issues/show/5524
+Fixed render multiple dates template issue.
 
 2009-11-24 - Update by Philip Almeida
 IE google canvas API include, thanks to Dirk Gabler for the report.

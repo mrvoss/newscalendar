@@ -33,6 +33,7 @@
 	padding:2px;
 	text-decoration:underline;
 	cursor: default;
+	border:1px solid transparent;
 }
 
 /* List view CSS */

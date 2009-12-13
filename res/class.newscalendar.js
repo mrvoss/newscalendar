@@ -42,6 +42,14 @@ newscalendar.tipSetup = function(
 	
 }
 
+newscalendar.addToolTipSelectorClass = function( element, className ) {
+    jQuery( element ).addClass( className );
+}
+
+newscalendar.removeToolTipSelectorClass = function( element, className ) {
+    jQuery( element ).removeClass( className );
+}
+
 newscalendar.processToolTip = function( toolTipID ) {
 
 	try {
@@ -79,19 +87,19 @@ newscalendar.processToolTip = function( toolTipID ) {
 		});
 
 		jQuery( '#idMenu' + toolTipID ).mouseover( function( event ) {
-
+			
 			event.preventDefault();
 			var currentSelectStarter = this;
-
-			currentSelectStarter.addClass('newscalendar-tip-selector');
-
+			newscalendar.addToolTipSelectorClass( currentSelectStarter, 'newscalendar-tip-selector' );
+			
+			
 			jQuery( '#idMenu' + toolTipID ).btOn();
-
+			
 			jQuery( '.newscalendar-tip-id-' + toolTipID ).bind( 'mouseleave', function( event ) {
 
 				event.preventDefault();
 				jQuery( '#idMenu' + toolTipID ).btOff();
-				currentSelectStarter.removeClass('newscalendar-tip-selector');
+				newscalendar.removeToolTipSelectorClass( currentSelectStarter, 'newscalendar-tip-selector' );
 
 			});
 
@@ -110,14 +118,14 @@ newscalendar.processToolTip = function( toolTipID ) {
 				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'shape' ) {
 
 					jQuery( '#idMenu' + toolTipID ).btOff();
-					currentSelectStarter.removeClass('newscalendar-tip-selector');
+					newscalendar.removeToolTipSelectorClass( currentSelectStarter, 'newscalendar-tip-selector' );
 
 				    }
 				} catch(e) {}
 
 			} );
 
-
+			
 		} );
 
 	} catch( e ) {}

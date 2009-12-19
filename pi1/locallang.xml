@@ -89,6 +89,27 @@
 			<label index="searchButtonLabel">Recherche</label>
 			<label index="noResults">Aucun résultat.</label>
 		</languageKey>
+		<languageKey index="it" type="array">
+			<label index="list_mode_1">Modo 1</label>
+			<label index="list_mode_2">Modo 2</label>
+			<label index="list_mode_3">Modo 3</label>
+			<label index="back">Indietro</label>
+			<label index="submit_button_label">Clicca qui per inoltrare il valore</label>
+			<label index="readmore">Vedi voci per giorno</label>
+			<label index="calPrev">Vedi mese precedente</label>
+			<label index="calNext">Vedi mese successivo</label>
+			<label index="calYear">Eventi del mese attuale</label>
+			<label index="pi_list_browseresults_prev">&lt; Precedente</label>
+			<label index="pi_list_browseresults_page">Pagina</label>
+			<label index="pi_list_browseresults_next">Successivo &gt;</label>
+			<label index="pi_list_browseresults_first">&lt;&lt; Primo</label>
+			<label index="pi_list_browseresults_last">Ultimo &gt;&gt;</label>
+			<label index="pi_list_browseresults_displays">Visualizzo risultati da  ###SPAN_BEGIN###%s a  %s&lt;/span&gt; su ###SPAN_BEGIN###%s&lt;/span&gt;</label>
+			<label index="pi_list_browseresults_displays_advanced">Visualizzo risultati ###FROM### a  ###TO### su  ###OUT_OF###</label>
+			<label index="pi_list_browseresults_to">a</label>
+			<label index="searchButtonLabel">Cerca</label>
+			<label index="noResults">Nessuna voce trovata.</label>
+		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="list_mode_1">Mode 1</label>
 			<label index="list_mode_2">Mode 2</label>

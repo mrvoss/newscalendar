@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -21,7 +21,7 @@ newscalendar.tipSetup = function(
 	shadowOffsetY,
 	positions,
 	fadeSpeed) {
-	
+
 	newscalendar.tip = {
 
 		width : width,
@@ -39,7 +39,7 @@ newscalendar.tipSetup = function(
 		positions: positions,
 		fadeSpeed : fadeSpeed
 	}
-	
+
 }
 
 newscalendar.addToolTipSelectorClass = function( element, className ) {
@@ -87,14 +87,14 @@ newscalendar.processToolTip = function( toolTipID ) {
 		});
 
 		jQuery( '#idMenu' + toolTipID ).mouseover( function( event ) {
-			
+
 			event.preventDefault();
 			var currentSelectStarter = this;
 			newscalendar.addToolTipSelectorClass( currentSelectStarter, 'newscalendar-tip-selector' );
-			
-			
+
+
 			jQuery( '#idMenu' + toolTipID ).btOn();
-			
+
 			jQuery( '.newscalendar-tip-id-' + toolTipID ).bind( 'mouseleave', function( event ) {
 
 				event.preventDefault();
@@ -104,7 +104,7 @@ newscalendar.processToolTip = function( toolTipID ) {
 			});
 
 			jQuery( '#idMenu' + toolTipID ).mouseout( function( event ) {
-				
+
 				event.preventDefault();
 
 				var checkTo = 'not_defined';
@@ -113,7 +113,7 @@ newscalendar.processToolTip = function( toolTipID ) {
 				}  else if ( typeof event.relatedTarget !== "undefined" ) {
 				    checkTo = event.relatedTarget.localName;
 				}
-		
+
 				try {
 				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'shape' ) {
 
@@ -125,7 +125,7 @@ newscalendar.processToolTip = function( toolTipID ) {
 
 			} );
 
-			
+
 		} );
 
 	} catch( e ) {}

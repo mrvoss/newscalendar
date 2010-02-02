@@ -1073,12 +1073,24 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      * @return   string  the whole img code
      */
 	function makeListImageCode ( $imgFieldContent, $type = null ) {
-	  if ( ! $imgFieldContent ) {
+
+	 // dam_ttnews compatible, no extra condiguration needed
+	 // sponsored by phase2-networks.com
+	 $damOn = t3lib_extMgm::isLoaded( $key = 'dam_ttnews' );
+	 if ( $damOn ) {
+	     $damFiles = tx_dam_db::getReferencedFiles('tt_news', $this->getFieldContent('uid'), 'tx_damnews_dam_images');
+	     if ( is_array( $damFiles['files'] ) )
+		$image = current($damFiles['files']);
+	 }
+	 
+	  if ( ! $imgFieldContent || ! $image && $damOn ) {
 	    return '';
 	  } else {
 
-		$imagesArray = explode(",", $imgFieldContent);
-		$image = $this->uploadFolder . $imagesArray['0'];
+		if ( ! $damOn ) {
+		    $imagesArray = explode(",", $imgFieldContent);
+		    $image = $this->uploadFolder . $imagesArray['0'];
+		}
 
 		if ( $type != 'calendar' ) {
 

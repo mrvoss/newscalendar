@@ -6,7 +6,7 @@ plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 
 	render {
-	    dayNameLength = 3
+	    #dayNameLength = 3
 	}
 
 	file.cssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
@@ -60,13 +60,14 @@ plugin.tx_newscalendar_pi1 {
 	  }
 	}
 	calendar {
+	  jQueryNoConflict = 0
 	  loadJQuery = 1
 	  loadJQueryTooltip = 1
 	  loadJGoogleCanvasAPI = 1
 	  dateChanger = 0
 	  addNoCache2Navigation = 1
 	  hideIfInPast = 0
-	  strftime.contextHeader = %A %d, %B %Y
+	  strftime.contextHeader = %A, %d. %B %Y
 	  strftime.contextItem = %H:%M
 	  startWeekDay = {$plugin.tx_newscalendar_pi1.calendar.startWeekDay}
 	  timeZone = {$plugin.tx_newscalendar_pi1.calendar.timeZone}

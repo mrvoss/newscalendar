@@ -60,7 +60,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
 		// Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
 		// the site will not be cached and the month navigator will work fine
@@ -383,6 +383,11 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$contextScript .= "\n";
 		$contextScript .= "\t" ."<!-- Newscalendar: Activate tooltip --> " . "\n\n";
 		$contextScript .= "\t" ."<script language=\"javascript\">" . "\n";
+
+		// Bug #6114
+		if ( $this->conf['calendar.']['jQueryNoConflict'] )
+		    $contextScript .= "\t" ."jQuery.noConflict(); " . "\n";
+
 		$contextScript .= "\t" ."jQuery( document ).ready( function() {" . "\n";
 
 		$contextScript .= "\t\t" ."newscalendar.tipSetup(" . $tipArgumentList . ");" . "\n";
@@ -1083,7 +1088,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$image = current($damFiles['files']);
 	 }
 	 
-	  if ( ! $imgFieldContent || ! $image && $damOn ) {
+	  if ( ! $imgFieldContent && (! $image && $damOn ) ) {
 	    return '';
 	  } else {
 

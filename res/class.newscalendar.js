@@ -115,7 +115,7 @@ newscalendar.processToolTip = function( toolTipID ) {
 				}
 
 				try {
-				    if ( checkTo !== 'CANVAS' &&  checkTo !== 'shape' ) {
+				    if ( checkTo !== 'canvas' && checkTo !== 'CANVAS' &&  checkTo !== 'shape' ) {
 
 					jQuery( '#idMenu' + toolTipID ).btOff();
 					newscalendar.removeToolTipSelectorClass( currentSelectStarter, 'newscalendar-tip-selector' );

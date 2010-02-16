@@ -173,10 +173,15 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->contextMenuLink = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'contextMenuLink', 'sDEF');
 		if($this->conf['render.']['contextMenuLink'])
 			$this->contextMenuLink = $this->conf['render.']['contextMenuLink'];
+
 		// Category List
 		$this->categorySelection = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'categorySelection', 'sDEF');
 		if($this->conf['render.']['categorySelection'])
 			$this->categorySelection = $this->conf['render.']['categorySelection'];
+
+		$this->useSubCategories = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'useSubCategories', 'sDEF');
+		if($this->conf['render.']['useSubCategories'])
+			$this->useSubCategories = $this->conf['render.']['useSubCategories'];
 
 		/*
 		* Get the PID from which to make the menu.
@@ -276,11 +281,16 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			// CHANGED BY RICC FROM '1' to '0'
 			$arrayCounter = 0;
 
+			if ( $this->categorySelection && $this->useSubCategories ) {
+			    $this->categorySelection .= ',' . tx_ttnews_div::getSubCategories( $this->categorySelection );
+			}
+
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 
                                 /**
-                                 * News category in list if applicable
+                                 * START: News category in list if applicable
                                  */
+
                                 if ( $this->categorySelection ) {
 
                                     $exists = false;
@@ -294,6 +304,10 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                                     if ( ! $exists ) continue;
 
                                 }
+
+                                /**
+                                 * STOP: News category in list if applicable
+                                 */
 
 				// News item default types
 				$resultList [$arrayCounter]['type'] = $row['type'];

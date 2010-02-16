@@ -173,6 +173,10 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		$this->contextMenuLink = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'contextMenuLink', 'sDEF');
 		if($this->conf['render.']['contextMenuLink'])
 			$this->contextMenuLink = $this->conf['render.']['contextMenuLink'];
+		// Category List
+		$this->categorySelection = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'categorySelection', 'sDEF');
+		if($this->conf['render.']['categorySelection'])
+			$this->categorySelection = $this->conf['render.']['categorySelection'];
 
 		/*
 		* Get the PID from which to make the menu.
@@ -218,7 +222,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		if($this->conf['show.']['allRecords'])
 			$this->splitQuery = '';
 
-
 		// Prevent interval item rendering on normal list view.
 		$firstDate	= strtotime($this->calendarYear.'-'.$this->calendarMonth.'-01');
 		$lastDay	= date('t',$firstDate);
@@ -230,15 +233,15 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		// Language query setup
 		if ($this->sys_language_mode == 'strict' && $GLOBALS['TSFE']->sys_language_content) {
 			// Just news in the same language
-			$langClause = 'sys_language_uid = ' . $GLOBALS['TSFE']->sys_language_content;
+			$langClause = 'tt_news.sys_language_uid = ' . $GLOBALS['TSFE']->sys_language_content;
 		} else {
 			// sys_language_mode != 'strict': If a certain language is requested, select only news-records in the default language. The translated articles (if they exist) will be overlayed later in the list or single function.
-			$langClause = 'sys_language_uid IN (0,-1)';
+			$langClause = 'tt_news.sys_language_uid IN (0,-1)';
 		}
 
 		$this->where =	$langClause . ' ' .
-						'AND ((	FROM_UNIXTIME((CASE tx_newscalendar_calendardate WHEN "0" THEN datetime ELSE tx_newscalendar_calendardate END),"%Y") = '.intval($this->calendarYear).' '.
-								'AND FROM_UNIXTIME((CASE tx_newscalendar_calendardate WHEN "0" THEN datetime ELSE tx_newscalendar_calendardate END),"%c") = '.intval($this->calendarMonth).') '.
+						'AND ((	FROM_UNIXTIME((CASE tx_newscalendar_calendardate WHEN "0" THEN tt_news.datetime ELSE tx_newscalendar_calendardate END),"%Y") = '.intval($this->calendarYear).' '.
+								'AND FROM_UNIXTIME((CASE tx_newscalendar_calendardate WHEN "0" THEN tt_news.datetime ELSE tx_newscalendar_calendardate END),"%c") = '.intval($this->calendarMonth).') '.
 						$queryInterval.' '.
 								') '.
 						$this->splitQuery .' '.
@@ -246,23 +249,23 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
 		// RICC begin -> changed resultset to retrieve more data from the tt_news record
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'uid,
-						pid,
-						sys_language_uid,
-						title,
-						datetime,
-						tx_newscalendar_calendardate_end,
-						tx_newscalendar_calendardate,
-						short,
-						image,
-						bodytext,
-						page,
-						type,
-						ext_url',
+					       'tt_news.uid,
+						tt_news.pid,
+						tt_news.sys_language_uid,
+						tt_news.title,
+						tt_news.datetime,
+						tt_news.tx_newscalendar_calendardate_end,
+						tt_news.tx_newscalendar_calendardate,
+						tt_news.short,
+						tt_news.image,
+						tt_news.bodytext,
+						tt_news.page,
+						tt_news.type,
+						tt_news.ext_url',
 						'tt_news',
-						$this->where . ' AND pid in (' . $this->search_list . ')',
+						$this->where . ' AND tt_news.pid in (' . $this->search_list . ')',
 						'',
-						'tx_newscalendar_calendardate, datetime ASC',
+						'tx_newscalendar_calendardate, tt_news.datetime ASC',
 						''
 		);
 
@@ -274,6 +277,23 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 			$arrayCounter = 0;
 
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+
+                                /**
+                                 * News category in list if applicable
+                                 */
+                                if ( $this->categorySelection ) {
+
+                                    $exists = false;
+                                    $categoryArray = explode( ",", $this->categorySelection );
+
+                                    foreach ( $categoryArray as $selectedCatId ) {
+                                        $exists = array_key_exists( $selectedCatId,  tx_ttnews::getCategories( $row['uid'] ) );
+                                        if ( $exists ) break;
+                                    }
+
+                                    if ( ! $exists ) continue;
+
+                                }
 
 				// News item default types
 				$resultList [$arrayCounter]['type'] = $row['type'];

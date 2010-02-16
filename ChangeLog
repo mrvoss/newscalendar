@@ -1,6 +1,12 @@
 Changelog
 
-2010-02-14
+2010-02-16 Philip Almeida <philip.almeida@freedomson.com>
+*   Tutorial update
+*   News category selector
+    Sponsored by phase2-networks.com
+    http://forge.typo3.org/issues/show/6356
+
+2010-02-14 Philip Almeida <philip.almeida@freedomson.com>
 Firefox 3.6 Compatible
 Sponsored by digital-park.de
 http://forge.typo3.org/issues/show/6304

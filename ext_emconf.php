@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'News Calendar',
-	'description' => 'Calendar for Ext:tt_news. Provides calendar and a list view functionality. Featured sponsors: geefgratis.nl, eventonizer.nl',
+	'description' => 'Calendar for Ext:tt_news. Provides calendar and a list view functionality. Main sponsors: geefgratis.nl, eventonizer.nl, phase2-networks.com ',
 	'category' => 'plugin',
 	'shy' => 0,
 	'version' => '2.1.4',

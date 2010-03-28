@@ -1,4 +1,4 @@
-<!-- New markers available: ###NEWS_SUBHEADER### and ###IMAGE###
+﻿<!-- New markers available: ###NEWS_SUBHEADER### and ###IMAGE###
 these can be set in the NEWSCALENDAR_LISTITEM; added by Clemens Riccabona, Riccabona eSolutions
  -->
 
@@ -30,6 +30,7 @@ these can be set in the NEWSCALENDAR_LISTITEM; added by Clemens Riccabona, Ricca
 	###TITLE###
 	###TARGET###
 	###DATETIME###
+	###STARTENDATE### : display the start date ( and the last date if exists ). Use the locallang value DateToDate to create the array of date.
 	###TITLE###
 	###IMAGE###
 	###NEWS_SUBHEADER###
@@ -39,7 +40,7 @@ these can be set in the NEWSCALENDAR_LISTITEM; added by Clemens Riccabona, Ricca
 
 <!-- ###NEWSCALENDAR_LISTITEM### begin-->	
 		<div class="newsCalendar_listItem">
-			<a href="###URL###" title="###TITLE###" target="###TARGET###">###DATETIME### -  ###TITLE###</a>
+			<a href="###URL###" title="###TITLE###" target="###TARGET###">###STARTENDATE### -  ###TITLE###</a>
 			<div class="newsCalendar_listItem_image"> ###IMAGE### </div>
 			<div class="newsCalendar_listItem_subheader"> ###NEWS_SUBHEADER### </div>
 

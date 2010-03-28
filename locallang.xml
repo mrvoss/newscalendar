@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
 	<meta type="array">
 		<type>module</type>
@@ -14,6 +14,7 @@
 			<label index="flexform.displayType.calendar">Calendar</label>
 			<label index="flexform.displayType.list">List</label>
 			<label index="flexform.displayType.listInterval">ListInterval</label>
+			<label index="flexform.displayType.nextEvents">Next Events</label>
 			<label index="flexform.monthLinkDisplay">Calendar list link display:</label>
 			<label index="flexform.calendarListView">Calendar list view page:</label>
 			<label index="flexform.single_view">Single view page for tt_news:</label>
@@ -53,6 +54,7 @@
 			<label index="flexform.displayType">Affichage:</label>
 			<label index="flexform.displayType.calendar">Calendrier</label>
 			<label index="flexform.displayType.list">Liste</label>
+			<label index="flexform.displayType.nextEvents">Prochains événements</label>
 			<label index="flexform.monthLinkDisplay">Afficher le lien vers la liste:</label>
 			<label index="flexform.calendarListView">Page d'affichage en liste:</label>
 			<label index="flexform.single_view">Page de détail de nouvelles tt_news:</label>

@@ -1,4 +1,4 @@
-# IE8 Tip compatible
+﻿# IE8 Tip compatible
 page.headerData.1000 = HTML
 page.headerData.1000.value = <meta http-equiv="X-UA-Compatible" content="IE=7" />
 
@@ -6,7 +6,8 @@ plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 
 	render {
-	    #dayNameLength = 3
+	    monthNavigationViaNews = 0
+            #dayNameLength = 3
 	    #useSubCategories = 1
 	}
 
@@ -81,5 +82,35 @@ plugin.tx_newscalendar_pi1 {
 	    file.maxW = 32
             file.maxH = 32
 	  }
+	}
+	listInterval {
+		hideIfInPast = 0
+	}
+	nextEvents {
+		# int [required] : number of items to show
+		maxItems = 100
+		# bool : relativeToCalendar will allow nextEvents to change the first date of events to display 
+		# to the first day of the month chosen if the month is in futur
+		relativeToCalendar = 0
+	}
+	pageBrowser {
+		# bool : enable the browseBox
+		show = 0 
+		# int [required if show = 1] : nb row per page
+		limit = 10
+		# int [required if show = 1] : nb pages
+		maxPages = 5
+		# bool : display the count of results
+		showResultCount = 1
+		# string : add parameters to the browseBox table
+		tableParams = class="browseBox"
+		# string [required if show = 1] : name of the pointer 
+		pointer = Calendar_list
+		# bool : show pages like : 1-5 6-10 ...
+		showRange = 1
+		# bool : show first and last link
+		showFirstLast = 0
+		# int/String : Position of the current page
+		pagefloat = center
 	}
 }

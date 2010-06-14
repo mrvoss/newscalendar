@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
 	<meta type="array">
 		<type>module</type>
@@ -68,6 +68,7 @@
 			<label index="pi_list_browseresults_to">a</label>
 			<label index="searchButtonLabel">Procurar</label>
 			<label index="noResults">Sem resultados.</label>
+			<label index="dateToDate">a</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="list_mode_1">Mode 1</label>

@@ -1,13 +1,10 @@
-﻿# IE8 Tip compatible
-page.headerData.1000 = HTML
-page.headerData.1000.value = <meta http-equiv="X-UA-Compatible" content="IE=7" />
-
 plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 
 	render {
 	    monthNavigationViaNews = 0
-            #dayNameLength = 3
+            ie7compat = 1 ﻿# IE8 Tip compatible
+	    #dayNameLength = 3
 	    #useSubCategories = 1
 	}
 
@@ -25,6 +22,7 @@ plugin.tx_newscalendar_pi1 {
 	file.calendarViewTemplate = {$plugin.tx_newscalendar_pi1.file.calendarViewTemplate}
 
 	file.arrowLeft = {$plugin.tx_newscalendar_pi1.file.arrowLeft}
+	file.arrowLeftDisabled = {$plugin.tx_newscalendar_pi1.file.arrowLeftDisabled}
 	file.arrowRight = {$plugin.tx_newscalendar_pi1.file.arrowRight}
 
 	show.allRecords = {$plugin.tx_newscalendar_pi1.show.allRecords}
@@ -52,7 +50,7 @@ plugin.tx_newscalendar_pi1 {
 	listView {
 	  subheader_stdWrap.crop = 180 | ...
 	  hideIfInPast = 0
-	  order = asc              
+	  order = asc
 	  strftime.main = %B - %Y
 	  strftime.header = %d - %A
 	  strftime.item = %H:%M
@@ -89,13 +87,13 @@ plugin.tx_newscalendar_pi1 {
 	nextEvents {
 		# int [required] : number of items to show
 		maxItems = 100
-		# bool : relativeToCalendar will allow nextEvents to change the first date of events to display 
+		# bool : relativeToCalendar will allow nextEvents to change the first date of events to display
 		# to the first day of the month chosen if the month is in futur
 		relativeToCalendar = 0
 	}
 	pageBrowser {
 		# bool : enable the browseBox
-		show = 0 
+		show = 0
 		# int [required if show = 1] : nb row per page
 		limit = 10
 		# int [required if show = 1] : nb pages
@@ -104,7 +102,7 @@ plugin.tx_newscalendar_pi1 {
 		showResultCount = 1
 		# string : add parameters to the browseBox table
 		tableParams = class="browseBox"
-		# string [required if show = 1] : name of the pointer 
+		# string [required if show = 1] : name of the pointer
 		pointer = Calendar_list
 		# bool : show pages like : 1-5 6-10 ...
 		showRange = 1

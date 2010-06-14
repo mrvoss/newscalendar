@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /***************************************************************
 *  Copyright notice$this->recursion$this->recursion$this->recursion
 *
@@ -120,8 +120,20 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
             $jsJQueryTooltip = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' . "\n";
         }
+
+        /**
+         * IE8 compat
+         */
+        if ( $this->conf['render.']['ie7compat'] ) {
+            $ie7compat = "<!-- EXT:newscalendar: IE8 Tip Compatibility: START --> " . "\n" .
+                                        '<meta http-equiv="X-UA-Compatible" content="IE=7" />' . "\n" .
+                                        "<!-- EXT:newscalendar: IE8 Tip Compatibility: END --> " . "\n\n";
+        }
+
         $GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc']
-                =   "\n" . "<!-- EXT:newscalendar: Javascript and CSS include files : START --> " . "\n" .
+                =   "\n" . 
+                $ie7compat . 
+                "<!-- EXT:newscalendar: Javascript and CSS include files : START --> " . "\n" .
                 '<link href="' . $this->cssCalendar	 . '" rel="stylesheet" type="text/css" />' . "\n" .
                 '<link href="' . $this->cssContextMenu . '" rel="stylesheet" type="text/css" />' . "\n" .
                 $jGoogleCanvas . $jsJQuery . $jsJQueryTooltip .
@@ -192,7 +204,11 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         // Category List
         $this->categorySelection = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'categorySelection', 'sDEF');
         if($this->conf['render.']['categorySelection'])
-            $this->categorySelection = $this->conf['render.']['categorySelection'];
+            /**
+             * http://forge.typo3.org/issues/show/7266
+             * This will add stdWrap capabilies to the parameter and enable Features like categorySelection.data = GPvar : tx_ttnews|cat
+             */
+            $this->categorySelection = $this->cObj->stdWrap($this->conf['render.']['categorySelection'], $this->conf['render.']['categorySelection.']);
 
         $this->useSubCategories = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'useSubCategories', 'sDEF');
         if($this->conf['render.']['useSubCategories'])
@@ -424,17 +440,43 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         $this->globalRes = $res;
 
-        // Thanks to Gregory Goidin
-        // Get the total row count for initial query.
+        //****************************************************************//
+        //gregory goidin - rvvn : start : We need the total count to initialize the pageBrowser
 
-        $rowCount = $GLOBALS['TYPO3_DB']->sql_num_rows( $this->globalRes );
+        /**
+         * If the type of view is able to have  a page browser we need to count the events again
+         * so we have the total record count for the paginator.
+         * We bypass the Calendar View by default.
+         */
+        if ( $this->displayType != 1 ) {
 
-        if ( $this->displayType == 4 // Next events view type
-                && $rowCount > intval( $this->conf['nextEvents.']['maxItems'] ) ) {
-            $rowCount = intval( $this->conf['nextEvents.']['maxItems'] );
+            $resCount = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+                    'count(*)',
+                    'tt_news',
+                    $this->where . ' AND tt_news.pid in (' . $this->search_list . ')',
+                    '',
+                    'tx_newscalendar_calendardate, tt_news.datetime ASC',
+                    ""
+            );
+
+            $rowCount = $GLOBALS['TYPO3_DB']->sql_fetch_row($resCount);
+
+            if (    $this->displayType == 4
+                    && $rowCount[0] > intval( $this->conf['nextEvents.']['maxItems'] ) ) {
+                    $rowCount[0] = intval( $this->conf['nextEvents.']['maxItems'] );
+            }
+
+            $this->globalResCount = $rowCount[0];
+
+        } else {
+
+            // For calendar view we do not use limits or paginator browser
+            $this->globalResCount = $GLOBALS[ 'TYPO3_DB' ]->sql_num_rows( $this->globalRes );
+
         }
 
-        $this->globalResCount = $rowCount;
+        //gregory goidin - rvvn : stop !
+        //****************************************************************//
 
         // Prevent interval item rendering on normal and next events list views.
         // Only this will be prepared to render selected categories.
@@ -523,8 +565,25 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                                 $resultList [$arrayCounter]['image']	= $row['image'];
                                 $resultList [$arrayCounter]['short']	= $row['short'];
 
-                                $arrayCounter ++;
+
+                                /**
+                                 * Remove items when in a interval and "hideIfInPast" is on
+                                 * $this->conf['calendar.']['hideIfInPast']
+                                 * Thanks to Marvin Stobberingh for reporting.
+                                 */
+
+                                if ( $this->conf['calendar.']['hideIfInPast']  ) {
+
+                                    if ( $resultList [$arrayCounter]['datetime'] < time() ) {
+
+                                        unset( $resultList [$arrayCounter - 1 ] );
+
+                                    } else {  $arrayCounter ++; }
+
+                                } else { $arrayCounter ++; }
+
                             }
+
                         }
                     }
                 }
@@ -642,7 +701,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $this->piVars['calendarMonth'] = ($this->calendarMonth==1?12:$this->calendarMonth-1);
 
         /*
-		* Build previous link  
+		* Build previous link
         */
         $overrulePIvars = array();
 
@@ -661,7 +720,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $this->piVars['calendarMonth'] = ($this->calendarMonth==12?1:$this->calendarMonth+1);
 
         /*
-		* Build next link  
+		* Build next link
         */
         $overrulePIvars = array();
 
@@ -674,7 +733,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $this->linkNext = $this->pi_linkTP_keepPIvars_url( $overrulePIvars, $cache=$this->cacheAdd,$clearAnyway=0);
 
         /*
-		* Reset date values. 
+		* Reset date values.
         */
         $this->piVars['calendarYear'] = $this->calendarYear;
         $this->piVars['calendarMonth'] = $this->calendarMonth;
@@ -712,7 +771,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         return $this->pi_wrapInBaseClass($calendar.$contextScript);
 
     }
-    
+
     /**
      * The buildContextMenu method of the PlugIn
      *
@@ -816,17 +875,20 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         @list( $p, $pl ) = each( $pn );
         @list($n, $nl) = each( $pn ); #previous and next links, if applicable
 
-        $previousImage  = $p;
-        $nextImage	= $n;
+        $previousImage = $previousImageDisabled = $p;
+        $nextImage = $n;
 
         // Render navigation links as images
         if ( $this->conf['calendar.']['renderNavigationAsImages'] ) {
 
             $arrowLeft = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowLeft'] ) );
+            $arrowLeftDisabled = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowLeftDisabled'] ) );
             $arrowRight = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowRight'] ) );
 
             $previousImage = $this->cObj->cImage( $arrowLeft, $this->conf['calendar.']['imageArrows.']);
+            $previousImageDisabled = $this->cObj->cImage( $arrowLeftDisabled, $this->conf['calendar.']['imageArrows.']);
             $nextImage = $this->cObj->cImage( $arrowRight, $this->conf['calendar.']['imageArrows.']);
+
         }
 
 
@@ -843,7 +905,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                         && $currentTime <= $calendarStartMonth )
                 || $this->conf['calendar.']['hideIfInPast'] == 0 ) ) {
             $p = ( $pl ? '<a href="' . $pl . '" title="'.$this->pi_getLL("calPrev").'">' . $previousImage . '</a>' : $previousImage );
-        } else { $p = $previousImage; }
+        } else { $p = $previousImageDisabled; }
 
 
         if ( $n ) $n = ( $nl ? '<a href="' . $nl . '" title="'.$this->pi_getLL("calNext").'">' . $nextImage . '</a>' : $nextImage);
@@ -891,7 +953,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
             // gregory goidin
             // no need of hidding events with start date < present day and end date > present day
-            
+
             if ( isset( $days[$day]  ) and is_array( $days[$day] ) ) {
 
 
@@ -988,7 +1050,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         $out = '<div'.$this->pi_classParam('listrow').'>';
         reset( $this->resultList );
-        $checkDate = 0; 
+        $checkDate = 0;
         while ( list( $key, $val) = each( $this->resultList ) ) {
 
             $recordDate = date('Y-m-d',$val['datetime']);

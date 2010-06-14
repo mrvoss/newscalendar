@@ -1,6 +1,15 @@
 Changelog
 
+2010-06-14 Philip Almeida <philip.almeida@freedomson.com>
+* HideIfInPast works with interval news items
+* IE8 Tip Compatibility switch
+* http://forge.typo3.org/issues/show/7266 - Add option - Thanks to Lukas Taferner
+* Tutorial Update
+* Add setup option "arrowLeftDisabled" - Thanks to Gregory Goidin
+* Add a new marker for tt_news "NEWS_STARTENDATE" - Thanks to Gregory Goidin
+
 2010-02-16 Philip Almeida <philip.almeida@freedomson.com>
+
 *   Tutorial update
 *   News category selector
     Sponsored by phase2-networks.com

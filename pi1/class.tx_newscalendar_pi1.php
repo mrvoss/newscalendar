@@ -427,6 +427,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                 tt_news.tx_newscalendar_calendardate,
                 tt_news.short,
                 tt_news.image,
+                tt_news.imagecaption,
+                tt_news.imagealttext,
+                tt_news.imagetitletext,
                 tt_news.bodytext,
                 tt_news.page,
                 tt_news.type,
@@ -1325,12 +1328,14 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         // Add one marker to allow the use of startdate, if there's a enddate, concat the two date with a locallang value "dateToDate"
         if($this->getFieldContent('tx_newscalendar_calendardate')!=0) {
             $marker['###STARTENDATE###'] = $this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$this->getFieldContent('tx_newscalendar_calendardate')));
+            $marker['###DAYNB###'] = $this->convertSpecialCharacters(trim(strftime("%e",$this->getFieldContent('tx_newscalendar_calendardate'))));
             if ($this->getFieldContent('tx_newscalendar_calendardate') != $this->getFieldContent('tx_newscalendar_calendardate_end') && $this->getFieldContent('tx_newscalendar_calendardate_end') !=0) {
                 $marker['###STARTENDATE###'].=" ".$this->pi_getLL("dateToDate")." ".$this->convertSpecialCharacters(strftime($this->conf['listView.']['strftime.']['header'],$this->getFieldContent('tx_newscalendar_calendardate_end')));
             }
         }
         else {
             $marker['###STARTENDATE###']=$marker['###DATETIME###'];
+            $marker['###DAYNB###'] = $this->convertSpecialCharacters(trim(strftime("%e",$this->getFieldContent('datetime'))));
         }
 
 
@@ -1426,26 +1431,41 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         if ( ! $imgFieldContent && (! $image && $damOn ) ) {
             return '';
         } else {
-
+	    $altText="";
+	    $titleText="";  
+	    $caption="";
+	    $caption= explode(chr(10), $this->getFieldContent('imagecaption'));
+            $caption = $caption[0];           
+	    $altText = explode(chr(10), $this->getFieldContent('imagealttext'));
+            $altText = $altText[0];
+            $titleText = explode(chr(10), $this->getFieldContent('imagetitletext'));
+            $titleText = $titleText[0];
+            //rvvn : gregory goidin : allow the user to use some data in TS => images titleText
+    	    $this->cObj->data['tx_newscalendar_caption'] = $caption;
             if ( ! $damOn ) {
                 $imagesArray = explode(",", $imgFieldContent);
                 $image = $this->uploadFolder . $imagesArray['0'];
             }
-
             if ( $type != 'calendar' ) {
-
-                $imgCode = $this->cObj->cImage($image, $this->conf['listView.']['image.']);
+            //rvvn : gregory goidin : add image alttext and titletext
+            	$conf=$this->conf['listView.']['image.'];
+            	$conf['altText']=$altText;
+            	$conf['titleText']=$titleText;
+                $imgCode = $this->cObj->cImage($image,$conf);              
 
             } else {
-
-                $imgCode = $this->cObj->cImage($image, $this->conf['calendar.']['image.']);
+            //rvvn : gregory goidin : add image alttext and titletext
+            	$conf=$this->conf['calendar.']['image.'];
+            	$conf['altText']=$altText;
+            	$conf['titleText']=$titleText;
+                $imgCode = $this->cObj->cImage($image, $conf);
 
 
             }
+            
             return $imgCode;
         }
     }
-
     // RICC end
 
 }

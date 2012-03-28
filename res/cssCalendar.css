@@ -75,3 +75,11 @@
 	padding-top:1em;
 	font-size:1.25em;
 }
+
+/**
+CANVAS
+http://forge.typo3.org/issues/35236
+*/
+.newscalendar-canvas {
+ left:0px;
+}

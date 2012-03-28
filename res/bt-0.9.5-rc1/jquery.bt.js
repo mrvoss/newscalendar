@@ -583,6 +583,7 @@ jQuery.bt = {version: '0.9.5-rc1'};
         } // </ switch >
         
         var canvas = document.createElement('canvas');
+	$(canvas).attr('id','newscalendar-canvas');
         $(canvas).attr('width', (numb($text.btOuterWidth(true)) + opts.strokeWidth*2 + shadowMarginX)).attr('height', (numb($text.outerHeight(true)) + opts.strokeWidth*2 + shadowMarginY)).appendTo($box).css({position: 'absolute', zIndex: opts.boxzIndex});
 
   

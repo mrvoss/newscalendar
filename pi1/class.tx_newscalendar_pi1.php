@@ -859,7 +859,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $day_names = array(); #generate all the day names according to the current locale
 
         #January 4, 1970 was a Sunday
-        for( $n = 0, $t = ( 3 + $first_day ) * 86400; $n < 7 ; $n++ , $t += 86400 ) {
+        for( $n = 0, $t = ( 3 + $first_day ) * 86400 - date('Z',0) ; $n < 7 ; $n++ , $t += 86400 ) {
 
             #%A means full textual day name
             $day_names[$n] = ucfirst( strftime( '%A', $t) );

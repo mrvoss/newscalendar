@@ -1,5 +1,8 @@
 Changelog
 
+2013-04-23 - Update by Clemens Riccabona
+* Resolved bugs: #9219, #28381, #8232, #31867
+
 2010-06-14 Philip Almeida <philip.almeida@freedomson.com>
 * HideIfInPast works with interval news items
 * IE8 Tip Compatibility switch

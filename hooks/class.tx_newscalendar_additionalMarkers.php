@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /** Use HOOK for additional Markers in tt_news
  *

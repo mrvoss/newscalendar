@@ -1303,7 +1303,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         }
 
         $marker['###URL###'] = $this->pi_linkTP_keepPIvars_url($overrulePIvars=array(),$cache=$this->cacheAdd,$clearAnyway=0,$this->singleView);
-        $marker['###TARGET###'] = '';
+        // Change by Ricc, date: 20130423; bug: #8232
+        //$marker['###TARGET###'] = '';
+        $marker['###TARGET###'] = $GLOBALS['TSFE']->config['config']['intTarget'];
         $marker['###IMAGE###'] = '';
         $marker['###NEWS_SUBHEADER###'] = '';
 

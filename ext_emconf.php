@@ -28,12 +28,14 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearcacheonload' => 0,
 	'lockType' => '',
 	'author' => 'Philip Almeida, Clemens Riccabona',
-	'author_email' => 'philip.almeida@freedomson.com, clemens@riccabona.biz',
+	'author_email' => 'philip.almeida@freedomson.com, clemens-at-riccabona{dot}biz',
 	'author_company' => 'freedomson.com eur-ops.com',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
+			'php' => '5.2.0-5.3.99',
+			'typo3' => '4.4.0-4.7.99',
 		),
 		'conflicts' => array(
 		),

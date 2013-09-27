@@ -1,6 +1,6 @@
 <?php
 /***************************************************************
-*  Copyright notice$this->recursion$this->recursion$this->recursion
+*  Copyright notice
 *
 *  (c) 2007 Philip Almeida <philip.almeida@gmail.com>
 *  All rights reserved
@@ -22,7 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
+// RICC 2013: not needed anymore since TYPO3-Autoloader
+//require_once(PATH_tslib.'class.tslib_pibase.php');
 
 /**
  * Plugin 'News Calendar' for the 'newscalendar' extension.

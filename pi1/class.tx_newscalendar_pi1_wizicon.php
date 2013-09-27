@@ -62,7 +62,9 @@ class tx_newscalendar_pi1_wizicon {
 					 */
 					function includeLocalLang()	{
 						$llFile = t3lib_extMgm::extPath('newscalendar').'locallang.xml';
-						$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+						// Patch suggested by Marc Neuhaus on forge, concerning TYPO3 v. 6.0 compatibility; Manually applied by RICC
+						$LOCAL_LANG = tx_ttnews_compatibility::getInstance()->readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+						//$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
 						
 						return $LOCAL_LANG;
 					}

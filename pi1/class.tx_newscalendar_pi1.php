@@ -690,7 +690,13 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         /*
 	* Set tt_news to the previous id so it sticks on navigation.
         */
-        $this->piVars['tt_news'] = $this->previousNews;
+				// by RICC 2013, #48025
+        //$this->piVars['tt_news'] = $this->previousNews;
+				if ($this->previousNews > 0) {
+					$this->piVars['tt_news'] = $this->previousNews;
+				} else {
+					$this->piVars['tt_news'] = null;
+				}
 
         /*
 		* Reset pointer.

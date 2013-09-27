@@ -1,5 +1,11 @@
 Changelog
 
+2013-09-27 - Update by Clemens Riccabona
+* Resolved bug: #46335
+* changed mail-adress of Clemens Riccabona in em_conf
+* obsolete require_once of pi_base in class pi1 removed
+
+
 2013-04-23 - Update by Clemens Riccabona
 * Resolved bugs: #9219, #28381, #8232, #31867
 

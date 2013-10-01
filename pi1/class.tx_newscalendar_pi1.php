@@ -1,8 +1,10 @@
 <?php
+
 /***************************************************************
 *  Copyright notice
 *
 *  (c) 2007 Philip Almeida <philip.almeida@gmail.com>
+*  (c) 2013 Clemens Riccabona <clemens@riccabona.it>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,8 +24,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-// RICC 2013: not needed anymore since TYPO3-Autoloader
-//require_once(PATH_tslib.'class.tslib_pibase.php');
 
 /**
  * Plugin 'News Calendar' for the 'newscalendar' extension.
@@ -33,8 +33,7 @@
  * @subpackage	tx_newscalendar
  */
 class tx_newscalendar_pi1 extends tslib_pibase {
-
-
+	
     var $prefixId       = 'tx_ttnews';		// Same as class name
     var $scriptRelPath	= 'pi1/class.tx_newscalendar_pi1.php';	// Path to this script relative to the extension dir.
     var $extKey		= 'newscalendar';	// The extension key.
@@ -49,7 +48,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
     var $jsContextMenu;
     // RICC end
 
-
     /**
      * The main method of the PlugIn
      *
@@ -57,7 +55,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      * @param	array		$conf: The PlugIn configuration
      * @return	The content that is displayed on the website
      */
-
     function main($main,$conf) {
 
         global $LANG;
@@ -170,8 +167,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         // It needs a tt_news list plugin.
 
         $this->monthNavigationViaNews = $this->conf['render.']['monthNavigationViaNews'];
-
-
 
         // Uid of list page
         $this->listPage = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPage', 'sDEF');
@@ -374,14 +369,10 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                     'OR ( tx_newscalendar_calendardate <= '.$lastDate.' AND tx_newscalendar_calendardate_end >= '.$firstDate.' ) )';
         }
 
-
         $this->where =	$langClause         . ' ' .
                 $queryYearMonth             . ' ' .
                 $this->splitQuery           . ' ' .
                 $this->cObj->enableFields( 'tt_news' );
-
-
-
 
         // gregory goidin - rvvn
         // add the limit parameter to configure the browsebox if needed in the sql query
@@ -415,8 +406,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         else if ($this->displayType == 4 && intval($this->conf['pageBrowser.']['show'])==0) {
             $limit = "0,".intval($this->conf['nextEvents.']['maxItems']);
         }
-
-
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'tt_news.uid,
@@ -569,7 +558,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                                 $resultList [$arrayCounter]['image']	= $row['image'];
                                 $resultList [$arrayCounter]['short']	= $row['short'];
 
-
                                 /**
                                  * Remove items when in a interval and "hideIfInPast" is on
                                  * $this->conf['calendar.']['hideIfInPast']
@@ -577,23 +565,17 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                                  */
 
                                 if ( $this->conf['calendar.']['hideIfInPast']  ) {
-
                                     if ( $resultList [$arrayCounter]['datetime'] < time() ) {
-
                                         unset( $resultList [$arrayCounter - 1 ] );
-
                                     } else {  $arrayCounter ++; }
-
                                 } else { $arrayCounter ++; }
-
                             }
-
                         }
                     }
                 }
             }
 
-            # sort alphabetically by name
+            // sort alphabetically by name
             if(is_array($resultList)) {
                 usort($resultList, array($this,'compare_datetime'));
             }
@@ -658,22 +640,17 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             while ( list( $key, $val ) = each( $this->resultList ) ) {
                 $dateTime = $val['monthday'];
 
-                if ( ! is_array($renderedDays[ $val['monthday'] ] ) ) {
+                if (!is_array($renderedDays[$val['monthday']])) {
                     // Create tooltip
                     $contextScript .= "\t\t" . "newscalendar.processToolTip( " . $dateTime . " )" . "\n";
                 }
 
                 $renderedDays[ $val['monthday'] ][] = $val;
 
-                if ($this->thisDay==$dateTime && $this->thisYear==$this->calendarYear && $this->thisMonth==$this->calendarMonth) {
-
+                if ($this->thisDay == $dateTime && $this->thisYear == $this->calendarYear && $this->thisMonth == $this->calendarMonth) {
                     $daysLinkArray[$dateTime] = array('idMenu'.$dateTime,'linked_today');
-
                 } else {
-
                     $daysLinkArray[$dateTime] = array('idMenu'.$dateTime,'linked_day');
-
-
                 }
             }
         }
@@ -702,45 +679,47 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		* Reset pointer.
         */
         $this->previousNews = intval($this->piVars['pointer']);
-        $this->piVars['pointer']=null;
+        $this->piVars['pointer'] = null;
 
         /*
 		* Set date values for previous link.
         */
-        $this->piVars['calendarYear'] =($this->calendarMonth==1?$this->calendarYear-1:$this->calendarYear);
-        $this->piVars['calendarMonth'] = ($this->calendarMonth==1?12:$this->calendarMonth-1);
+        $this->piVars['calendarYear'] = ($this->calendarMonth == 1  ? $this->calendarYear-1 : $this->calendarYear);
+        $this->piVars['calendarMonth'] = ($this->calendarMonth == 1 ? 12 : $this->calendarMonth-1);
 
         /*
 		* Build previous link
         */
         $overrulePIvars = array();
 
-        if ( $this->monthNavigationViaNews )
+        if ($this->monthNavigationViaNews) {
             $overrulePIvars = array('month'=> $this->piVars['calendarMonth'],
                     'year' => $this->piVars['calendarYear'],
                     'calendarMonth' => null,
                     'calendarYear' => null);
+				}
 
-        $this->linkPrev = $this->pi_linkTP_keepPIvars_url( $overrulePIvars, $cache=$this->cacheAdd,$clearAnyway=0);
+        $this->linkPrev = $this->pi_linkTP_keepPIvars_url($overrulePIvars, $cache = $this->cacheAdd, $clearAnyway = 0);
 
         /*
 		* Set date values for next link.
         */
-        $this->piVars['calendarYear'] =($this->calendarMonth==12?$this->calendarYear+1:$this->calendarYear);
-        $this->piVars['calendarMonth'] = ($this->calendarMonth==12?1:$this->calendarMonth+1);
+        $this->piVars['calendarYear'] = ($this->calendarMonth == 12 ? $this->calendarYear+1 : $this->calendarYear);
+        $this->piVars['calendarMonth'] = ($this->calendarMonth == 12 ? 1 : $this->calendarMonth+1);
 
         /*
 		* Build next link
         */
         $overrulePIvars = array();
 
-        if ( $this->monthNavigationViaNews )
+        if ( $this->monthNavigationViaNews ) {
             $overrulePIvars = array('month'=> $this->piVars['calendarMonth'],
                     'year' => $this->piVars['calendarYear'],
                     'calendarMonth' => null,
                     'calendarYear' => null);
+				}
 
-        $this->linkNext = $this->pi_linkTP_keepPIvars_url( $overrulePIvars, $cache=$this->cacheAdd,$clearAnyway=0);
+        $this->linkNext = $this->pi_linkTP_keepPIvars_url($overrulePIvars, $cache=$this->cacheAdd, $clearAnyway=0);
 
         /*
 		* Reset date values.
@@ -758,7 +737,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         */
 
         if ($this->listPage) {
-
             $this->piVars['startingPoint'] = $this->startingPoint;
             $this->piVars['recursion'] = $this->recursion;
 
@@ -859,16 +837,16 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         $first_of_month = mktime( 0, 0, 0, $month, 1, $year );
 
-        # remember that mktime will automatically correct if invalid dates are entered
-        # for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998
-        # this provides a built in "rounding" feature to generate_calendar()
+        // remember that mktime will automatically correct if invalid dates are entered
+				// for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998
+				// this provides a built in "rounding" feature to generate_calendar()
 
         $day_names = array(); #generate all the day names according to the current locale
 
-        #January 4, 1970 was a Sunday
+        // January 4, 1970 was a Sunday
         for( $n = 0, $t = ( 3 + $first_day ) * 86400 - date('Z',0) ; $n < 7 ; $n++ , $t += 86400 ) {
 
-            #%A means full textual day name
+            // %A means full textual day name
             $day_names[$n] = ucfirst( strftime( '%A', $t) );
 
         }
@@ -878,18 +856,18 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         $title = $this->convertSpecialCharacters( ucfirst( $month_name ) ) . '&nbsp;' . $year;
 
-        #note that some locales don't capitalize month and day names
+        // note that some locales don't capitalize month and day names
         $this->listHeader = $this->convertSpecialCharacters( ucfirst( strftime( $this->conf['listView.']['strftime.']['main'], $first_of_month ) ) );
 
-        #Begin calendar. Uses a real <caption>. See http://diveintomark.org/archives/2002/07/03
+        // Begin calendar. Uses a real <caption>. See http://diveintomark.org/archives/2002/07/03
         @list( $p, $pl ) = each( $pn );
-        @list($n, $nl) = each( $pn ); #previous and next links, if applicable
+        @list($n, $nl) = each( $pn ); // previous and next links, if applicable
 
         $previousImage = $previousImageDisabled = $p;
         $nextImage = $n;
 
         // Render navigation links as images
-        if ( $this->conf['calendar.']['renderNavigationAsImages'] ) {
+        if ($this->conf['calendar.']['renderNavigationAsImages']) {
 
             $arrowLeft = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowLeft'] ) );
             $arrowLeftDisabled = str_replace( PATH_site, '', t3lib_div::getFileAbsFileName( $this->conf['file.']['arrowLeftDisabled'] ) );
@@ -898,7 +876,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             $previousImage = $this->cObj->cImage( $arrowLeft, $this->conf['calendar.']['imageArrows.']);
             $previousImageDisabled = $this->cObj->cImage( $arrowLeftDisabled, $this->conf['calendar.']['imageArrows.']);
             $nextImage = $this->cObj->cImage( $arrowRight, $this->conf['calendar.']['imageArrows.']);
-
         }
 
 
@@ -918,7 +895,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         } else { $p = $previousImageDisabled; }
 
 
-        if ( $n ) $n = ( $nl ? '<a href="' . $nl . '" title="'.$this->pi_getLL("calNext").'">' . $nextImage . '</a>' : $nextImage);
+        if ($n) { 
+					$n = ( $nl ? '<a href="' . $nl . '" title="'.$this->pi_getLL("calNext").'">' . $nextImage . '</a>' : $nextImage);
+				}
 
         // Thanks to Patrick Gaumond and his team for the fix on month display.
         $calendar = '<table class="calendar-table" cellpadding="0" cellspacing="0">' . "\n" .
@@ -941,14 +920,14 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $calendar .= "\t\t\t" . '</tr>' . "\n";
         $calendar .= "\t\t\t" . '<tr>'	. "\n";
 
-        if( $weekday > 0 ) {
-            $calendar .= "\t\t\t\t" . '<td colspan="'.$weekday.'">&nbsp;</td>' . "\n"; #initial 'empty' days
+        if ($weekday > 0) {
+            $calendar .= "\t\t\t\t" . '<td colspan="'.$weekday.'">&nbsp;</td>' . "\n"; // initial 'empty' days
         }
 
-        for( $day=1, $days_in_month=date('t',$first_of_month); $day<=$days_in_month; $day++,$weekday++) {
+        for ($day=1, $days_in_month=date('t',$first_of_month); $day<=$days_in_month; $day++,$weekday++ ) {
 
-            if( $weekday == 7 ) {
-                $weekday   = 0; #start a new week
+            if ($weekday == 7) {
+                $weekday   = 0; // start a new week
                 $calendar .= "\t\t\t" . '</tr>' . "\n";
                 $calendar .= "\t\t\t" . '<tr>' . "\n";
             }
@@ -959,13 +938,10 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             $myDay = strlen($day)==1?'0'.$day:$day;
             $renderDay = $year . $month . $myDay;
 
-
-
             // gregory goidin
             // no need of hidding events with start date < present day and end date > present day
 
             if ( isset( $days[$day]  ) and is_array( $days[$day] ) ) {
-
 
                 @list($link, $classes, $content) = $days[$day];
                 if(is_null($content))  $content  = (strlen($day)==1?'0'.$day:$day);
@@ -975,7 +951,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             else {
                 $newDay = (strlen($day)==1?'0'.$day:$day);
 
-                if ($this->thisDay==$newDay && $this->thisYear==$year && $this->thisMonth==$month) {
+                if ($this->thisDay == $newDay && $this->thisYear == $year && $this->thisMonth == $month) {
                     $calendar .= "\t\t\t\t" . '<td><div class="linked_today_nolink" >'.$newDay.'</div></td>' . "\n";
                 }else {
                     $calendar .= "\t\t\t\t" . '<td>' . $newDay . '</td>' . "\n";
@@ -983,9 +959,12 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             }
         }
 
-        if( $weekday != 7 ) $calendar .= "\t\t\t\t" . '<td colspan="'.(7-$weekday).'">&nbsp;</td>' . "\n"; #remaining "empty" days
+        if ($weekday != 7) {
+	        // remaining "empty" days
+					$calendar .= "\t\t\t\t" . '<td colspan="'.(7-$weekday).'">&nbsp;</td>' . "\n";
+				}
 
-        if ( $this->monthLinkDisplay == 1 ) {
+        if ($this->monthLinkDisplay == 1) {
 
             $calendar .= "\t\t\t"	    . '</tr>' . "\n";
             $calendar .= "\t\t\t"	    . '<tr>' . "\n";
@@ -994,11 +973,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             $calendar .= "\t\t\t\t"	    . '</td>' . "\n";
             $calendar .= "\t\t\t"	    . '</tr>' . "\n";
 
-
         } else {
-
             $calendar .= "\t\t\t"	    . '</tr>' . "\n";
-
         }
 
         return $calendar . "\t\t" . '</table>' . "\n";
@@ -1482,5 +1458,4 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newscalendar/pi1/class.tx_newscalendar_pi1.php']) {
     include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newscalendar/pi1/class.tx_newscalendar_pi1.php']);
 }
-
 ?>

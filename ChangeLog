@@ -1,5 +1,9 @@
 Changelog
 
+2013-10-01 - Update by Clemens Riccabona
+* #11263
+* formatting and changes to meet the CGL in various files.
+
 2013-09-27 - Update by Clemens Riccabona
 * Resolved bug: #46335, #48025
 * changed mail-adress of Clemens Riccabona in em_conf

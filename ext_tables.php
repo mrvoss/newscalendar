@@ -1,5 +1,7 @@
 <?php
-if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
+if (!defined ('TYPO3_MODE')) {
+	die ('Access denied.');
+}
 $tempColumns = Array (
 	"tx_newscalendar_state" => Array (
 		"exclude" => 1,
@@ -55,12 +57,12 @@ t3lib_extMgm::addPiFlexFormValue(
 );
 
 
-#t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","News Calendar");
+// t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","News Calendar");
 t3lib_extMgm::addStaticFile($_EXTKEY,"static/","News Calendar");
 
-if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_newscalendar_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_newscalendar_pi1_wizicon.php';
+if (TYPO3_MODE=="BE") {
+	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_newscalendar_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_newscalendar_pi1_wizicon.php';
+}
 
-/*
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/News_Calendar/', 'News Calendar');
-*/
+
 ?>

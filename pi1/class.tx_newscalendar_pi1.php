@@ -273,11 +273,10 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
     }
 
-    // +---------------------------------------------------------
-    // | Calendar array
-    // | All query building is done here.
-    // +---------------------------------------------------------
-
+    /**
+		 * Calendar array
+		 * All query building is done here.
+		 */
     function buildCalendarArray() {
 
         // Define the list of pages to search (999 depth level).
@@ -287,8 +286,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $this->splitQuery = 'AND tx_newscalendar_state = 1';
 
         // If showAllRecors is active, display all records.
-        if( $this->conf['show.']['allRecords'] )
+        if ($this->conf['show.']['allRecords']) {
             $this->splitQuery = '';
+				}
 
 
         // gregory goidin - rvvn
@@ -336,8 +336,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                 }
                 break;
             case 4: // NEXTEVENTS
-                if ( $this->conf['nextEvents.']['relativeToCalendar'] == 1
-                        && $currentTime <= $calendarStartMonth ) {
+                if ($this->conf['nextEvents.']['relativeToCalendar'] == 1 && $currentTime <= $calendarStartMonth) {
                     $firstDate = $calendarStartMonth;
                 }
                 else {
@@ -408,11 +407,12 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         }
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'tt_news.uid,
+               'tt_news.uid,
                 tt_news.pid,
                 tt_news.sys_language_uid,
                 tt_news.title,
                 tt_news.datetime,
+								tt_news.author,
                 tt_news.tx_newscalendar_calendardate_end,
                 tt_news.tx_newscalendar_calendardate,
                 tt_news.short,
@@ -1247,7 +1247,12 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $items=array();
         // Make list table rows
         while($this->internal['currentRow'] = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $items[]=$this->makeListItemNormal();
+					// get the translated record if the content language is not the default language
+	        if ($GLOBALS['TSFE']->sys_language_content) {
+            $OLmode = $GLOBALS['TSFE']->tmpl->setup['config.']['sys_language_overlay'];
+            $this->internal['currentRow'] = $GLOBALS['TSFE']->sys_page->getRecordOverlay('tt_news', $this->internal['currentRow'], $GLOBALS['TSFE']->sys_language_content, $OLmode);
+	        }
+          $items[] = $this->makeListItemNormal();
         }
 
         $out = '<div'.$this->pi_classParam('listrow').'>
@@ -1261,7 +1266,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      *
      * @return    Imploded column values
      */
-    function makeListItemNormal( $type = 'list' ) {
+    function makeListItemNormal($type='list') {
 
         $this->piVars['tt_news'] = $this->getFieldContent('uid');
         $this->piVars['backPid'] = $this->backPage;
@@ -1278,8 +1283,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                 $templateMarker = '###NEWSCALENDAR_CALENDARITEM###';
                 break;
         }
-
-        if ( $type == 'calendar' ) {
+        
+        if ($type=='calendar') {
             $template = $this->cObj->getSubpart( $this->calendarViewTemplate, $templateMarker );
         } else {
             $template = $this->cObj->getSubpart( $this->listViewTemplate, $templateMarker );
@@ -1291,6 +1296,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $marker['###TARGET###'] = $GLOBALS['TSFE']->config['config']['intTarget'];
         $marker['###IMAGE###'] = '';
         $marker['###NEWS_SUBHEADER###'] = '';
+				$marker['###AUTHOR###'] = $this->getFieldContent('author');
 
 
         // Set special news type context menu link (local page)
@@ -1365,7 +1371,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      */
     function getFieldHeader($fN) {
         switch($fN) {
-
             default:
                 return $this->pi_getLL('listFieldHeader_'.$fN,'['.$fN.']');
                 break;
@@ -1373,7 +1378,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
     }
 
     /**
-     * Returns a sorting link for a column header
+     * @brief Returns a sorting link for a column header
      *
      * @param    string        $fN: Fieldname
      * @return    The fieldlabel wrapped in link that contains sorting vars
@@ -1383,6 +1388,12 @@ class tx_newscalendar_pi1 extends tslib_pibase {
     }
 
 
+   /**
+		* @brief converts special characters
+		*
+		* @param string to convert
+		* @return string converted
+		**/
     function convertSpecialCharacters($string) {
         switch ($this->parserFunction) {
             case 'htmlspecialchars':
@@ -1394,65 +1405,57 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         }
     }
 
-    // RICC begin
-    // get the image html code via t3 api funcs.
     /**
-     * Returns the html for the image(s) in the listView
+     * @brief Returns the html for the image(s) in the listView using typo3 API functions
      *
      * @param    string  $imgFieldContent: Content of the image field
      * @return   string  the whole img code
+		 * @author Clemens Riccabona, www.riccabona.it
      */
     function makeListImageCode ( $imgFieldContent, $type = null ) {
-
-        // dam_ttnews compatible, no extra configuration needed
-        // sponsored by phase2-networks.com
-        $damOn = t3lib_extMgm::isLoaded( $key = 'dam_ttnews' );
-        if ( $damOn ) {
-            $damFiles = tx_dam_db::getReferencedFiles('tt_news', $this->getFieldContent('uid'), 'tx_damnews_dam_images');
-            if ( is_array( $damFiles['files'] ) )
-                $image = current($damFiles['files']);
+      // dam_ttnews compatible, no extra configuration needed
+      // sponsored by phase2-networks.com
+      $damOn = t3lib_extMgm::isLoaded( $key = 'dam_ttnews' );
+      if ($damOn) {
+        $damFiles = tx_dam_db::getReferencedFiles('tt_news', $this->getFieldContent('uid'), 'tx_damnews_dam_images');
+         if (is_array($damFiles['files'])) {
+					$image = current($damFiles['files']);
+				}
+      }
+      if (!$imgFieldContent && (!$image && $damOn)) {
+        return '';
+      } else {
+		    $altText="";
+		    $titleText="";  
+		    $caption="";
+		    $caption= explode(chr(10), $this->getFieldContent('imagecaption'));
+	      $caption = $caption[0];
+		    $altText = explode(chr(10), $this->getFieldContent('imagealttext'));
+	      $altText = $altText[0];
+	      $titleText = explode(chr(10), $this->getFieldContent('imagetitletext'));
+	      $titleText = $titleText[0];
+        //rvvn : gregory goidin : allow the user to use some data in TS => images titleText
+    	  $this->cObj->data['tx_newscalendar_caption'] = $caption;
+        if (!$damOn) {
+          $imagesArray = explode(",", $imgFieldContent);
+          $image = $this->uploadFolder . $imagesArray['0'];
         }
-
-        if ( ! $imgFieldContent && (! $image && $damOn ) ) {
-            return '';
+        if ($type != 'calendar') {
+          //rvvn : gregory goidin : add image alttext and titletext
+          $conf=$this->conf['listView.']['image.'];
+          $conf['altText']=$altText;
+          $conf['titleText']=$titleText;
+          $imgCode = $this->cObj->cImage($image,$conf);              
         } else {
-	    $altText="";
-	    $titleText="";  
-	    $caption="";
-	    $caption= explode(chr(10), $this->getFieldContent('imagecaption'));
-            $caption = $caption[0];           
-	    $altText = explode(chr(10), $this->getFieldContent('imagealttext'));
-            $altText = $altText[0];
-            $titleText = explode(chr(10), $this->getFieldContent('imagetitletext'));
-            $titleText = $titleText[0];
-            //rvvn : gregory goidin : allow the user to use some data in TS => images titleText
-    	    $this->cObj->data['tx_newscalendar_caption'] = $caption;
-            if ( ! $damOn ) {
-                $imagesArray = explode(",", $imgFieldContent);
-                $image = $this->uploadFolder . $imagesArray['0'];
-            }
-            if ( $type != 'calendar' ) {
-            //rvvn : gregory goidin : add image alttext and titletext
-            	$conf=$this->conf['listView.']['image.'];
-            	$conf['altText']=$altText;
-            	$conf['titleText']=$titleText;
-                $imgCode = $this->cObj->cImage($image,$conf);              
-
-            } else {
-            //rvvn : gregory goidin : add image alttext and titletext
-            	$conf=$this->conf['calendar.']['image.'];
-            	$conf['altText']=$altText;
-            	$conf['titleText']=$titleText;
-                $imgCode = $this->cObj->cImage($image, $conf);
-
-
-            }
-            
-            return $imgCode;
+          //rvvn : gregory goidin : add image alttext and titletext
+          $conf=$this->conf['calendar.']['image.'];
+          $conf['altText']=$altText;
+          $conf['titleText']=$titleText;
+          $imgCode = $this->cObj->cImage($image, $conf);
         }
+        return $imgCode;
+      }
     }
-    // RICC end
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newscalendar/pi1/class.tx_newscalendar_pi1.php']) {

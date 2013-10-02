@@ -1,15 +1,19 @@
 Changelog
 
-2013-10-01 - Update by Clemens Riccabona
+2013-10-02 - Update by Clemens Riccabona <www.riccabona.it>
+* fixed issues: #44405, #29511, #9645, #11263
+* updated compatibility in emconf, refactored complete additionalMarker hook
+
+2013-10-01 - Update by Clemens Riccabona <www.riccabona.it>
 * #11263
 * formatting and changes to meet the CGL in various files.
 
-2013-09-27 - Update by Clemens Riccabona
+2013-09-27 - Update by Clemens Riccabona <www.riccabona.it>
 * Resolved bug: #46335, #48025
 * changed mail-adress of Clemens Riccabona in em_conf
 * obsolete require_once of pi_base in class pi1 removed
 
-2013-04-23 - Update by Clemens Riccabona
+2013-04-23 - Update by Clemens Riccabona <www.riccabona.it>
 * Resolved bugs: #9219, #28381, #8232, #31867
 
 2010-06-14 Philip Almeida <philip.almeida@freedomson.com>

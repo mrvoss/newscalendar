@@ -41,12 +41,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
     var $resultList;
     var $resultListCount;
     var $globalRes;
-
-
-    // RICC begin: add uploads folder of tt_news as gVar; can probably better retrieved later on from some TS settings?
-    var $uploadFolder = 'uploads/pics/';
+    var $uploadFolder = 'uploads/pics/'; // upload folder, should be same as in tt_news indeed!
     var $jsContextMenu;
-    // RICC end
 
     /**
      * The main method of the PlugIn
@@ -55,77 +51,34 @@ class tx_newscalendar_pi1 extends tslib_pibase {
      * @param	array		$conf: The PlugIn configuration
      * @return	The content that is displayed on the website
      */
-    function main($main,$conf) {
-
+    function main($content, $conf) {
         global $LANG;
-        $this->conf = $conf;
-        $this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
-        $this->pi_setPiVarDefaults();
-        $this->pi_loadLL();
-        $this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
-
-        // Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
-        // the site will not be cached and the month navigator will work fine
-        // "Markus Waskowski" growing-media.de
-
-        // Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
-        $this->cacheAdd = 0;
-        if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
-            $this->cacheAdd = 1;
-        }
-
-        /*
-		* Retrieve day vars
-        */
-        $this->time             = time();
-        $this->thisDay		= date('j',time());
-        $this->thisYear		= date('Y',time());
-        $this->thisMonth	= date('n',time());
-
-        /*
-		* Define parser function "hmtlentities" or "htmlspecialchars"
-        */
-        $this->parserFunction	= ($this->conf['special.']['parserFunction']?$this->conf['special.']['parserFunction']:'htmlspecialchars');
-
-        /*
-		* Retrieve conf variables for css definitions
-        */
-        // RICC begin -> Do it the more easy way without ifs via std t3 api funcs.
-        // You have just to cut the PATH_site for getting the real relative urls.
-        // Now you can overwrite it easily within your own TS setup
-        // (I experienced problems with that on my systems) and it
-        // is better for strange installations (realurl; subfolder installation of t3)
-        // 2008-05-30: Added possibility to configure js-library for compressed versions etc.
-        $this->cssCalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssCalendar']));
-        $this->cssContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssContextMenu']));
-        $this->jsContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsContextMenu']));
-        $this->jsJQuery		= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQuery']));
-        $this->jsJQueryTooltip	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQueryTooltip']));
-        $this->jsDateChanger	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsDateChanger']));
-
-        $this->jsNewscalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsNewscalendar']));
+				// call the init function, which does some basic initial settings!
+				$this->init($conf);
 
         // Include IE canvas API
-        if ( $this->conf['calendar.']['loadJGoogleCanvasAPI'] ) {
-            $jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsIEGoogleCanvasAPI']));
-            $jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
+        if ($this->conf['calendar.']['loadJGoogleCanvasAPI']) {
+          $jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsIEGoogleCanvasAPI']));
+          $jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
         }
         // Include jQuery API
-        if ( $this->conf['calendar.']['loadJQuery'] ) {
-            $jsJQuery = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' . "\n";
+        if ($this->conf['calendar.']['loadJQuery']) {
+          $jsJQuery = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' . "\n";
         }
         // Include tooltip API
         if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
-            $jsJQueryTooltip = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' . "\n";
+          $jsJQueryTooltip = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' . "\n";
         }
 
         /**
          * IE8 compat
+				 * @todo this should be done via global metatags by the user. not by us.
+				 * this can harm the rest of the page! (ie7 is old and not very wide spread anyway.)
          */
         if ( $this->conf['render.']['ie7compat'] ) {
-            $ie7compat = "<!-- EXT:newscalendar: IE8 Tip Compatibility: START --> " . "\n" .
-                                        '<meta http-equiv="X-UA-Compatible" content="IE=7" />' . "\n" .
-                                        "<!-- EXT:newscalendar: IE8 Tip Compatibility: END --> " . "\n\n";
+            $ie7compat = '<!-- EXT:newscalendar: IE8 Tip Compatibility: START --> ' . '\n' .
+                         '<meta http-equiv="X-UA-Compatible" content="IE=7" />' . '\n' .
+                         '<!-- EXT:newscalendar: IE8 Tip Compatibility: END -->' . '\n\n';
         }
 
         $GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc']
@@ -138,28 +91,24 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                 '<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n" .
                 '<!-- EXT:newscalendar: Javascript and CSS include files : END --> ' . "\n";
 
-        /*
-		* Set template file for list view
-        */
-        // RICC begin -> Do it the most easiest way via t3 api funcs.
-        // Now you can overwrite it easily within your own TS setup -> see above
+		    // Set template files for list view
         $this->listViewTemplate = $this->cObj->fileResource($this->conf['file.']['listViewTemplate']);
-        // RICC end
-
         $this->calendarViewTemplate = $this->cObj->fileResource($this->conf['file.']['calendarViewTemplate']);
 
 
         // Display Type ( calendar, listview, listinterval, nextevents )
         $this->displayType = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'displayType', 'sDEF');
-        if($this->conf['render.']['displayType'])
-            $this->displayType = $this->conf['render.']['displayType'];
+        if($this->conf['render.']['displayType']) {
+          $this->displayType = $this->conf['render.']['displayType'];
+				}
 
         // Show link to list
         // When active there will be a link on the calendar month and bottom
         // to the configured list type..
         $this->monthLinkDisplay = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'monthLinkDisplay', 'sDEF');
-        if($this->conf['render.']['monthLinkDisplay'])
-            $this->monthLinkDisplay = $this->conf['render.']['monthLinkDisplay'];
+        if($this->conf['render.']['monthLinkDisplay']) {
+          $this->monthLinkDisplay = $this->conf['render.']['monthLinkDisplay'];
+				}
 
 
         // Connect all navigators to tt_news list display.
@@ -170,45 +119,54 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         // Uid of list page
         $this->listPage = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPage', 'sDEF');
-        if($this->conf['render.']['listPage'])
+        if($this->conf['render.']['listPage']) {
             $this->listPage = $this->conf['render.']['listPage'];
+				}
         // News item single view
         $this->singleView = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'destinationPage', 'sDEF');
-        if($this->conf['render.']['singleView'])
+        if($this->conf['render.']['singleView']) {
             $this->singleView = $this->conf['render.']['singleView'];
+				}
         // Single news item backpage
         $this->backPage = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'backPage', 'sDEF');
-        if($this->conf['render.']['backPage'])
+        if($this->conf['render.']['backPage']) {
             $this->backPage = $this->conf['render.']['backPage'];
+				}
         // Starting point for news records
         $this->startingPoint = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'pidList', 'sDEF');
-        if($this->conf['render.']['startingPoint'])
+        if($this->conf['render.']['startingPoint']) {
             $this->startingPoint = $this->conf['render.']['startingPoint'];
+				}
         // Recursion for starting point
         $this->recursion = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'recursion', 'sDEF');
-        if($this->conf['render.']['recursion'])
+        if($this->conf['render.']['recursion']) {
             $this->recursion = $this->conf['render.']['recursion'];
+				}
         // Day length
         $this->dayNameLength = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'dayNameLength', 'sDEF');
-        if($this->conf['render.']['dayNameLength'])
+        if($this->conf['render.']['dayNameLength']) {
             $this->dayNameLength = $this->conf['render.']['dayNameLength'];
+				}
         // Context menu link type
         $this->contextMenuLink = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'contextMenuLink', 'sDEF');
-        if($this->conf['render.']['contextMenuLink'])
+        if($this->conf['render.']['contextMenuLink']) {
             $this->contextMenuLink = $this->conf['render.']['contextMenuLink'];
+				}
 
         // Category List
         $this->categorySelection = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'categorySelection', 'sDEF');
-        if($this->conf['render.']['categorySelection'])
+        if($this->conf['render.']['categorySelection']) {
             /**
              * http://forge.typo3.org/issues/show/7266
              * This will add stdWrap capabilies to the parameter and enable Features like categorySelection.data = GPvar : tx_ttnews|cat
              */
             $this->categorySelection = $this->cObj->stdWrap($this->conf['render.']['categorySelection'], $this->conf['render.']['categorySelection.']);
+				}
 
         $this->useSubCategories = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'useSubCategories', 'sDEF');
-        if($this->conf['render.']['useSubCategories'])
+        if($this->conf['render.']['useSubCategories']) {
             $this->useSubCategories = $this->conf['render.']['useSubCategories'];
+				}
 
         /*
          * Get the PID from which to make the menu.
@@ -267,11 +225,53 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
             default:
                 return $this->pi_wrapInBaseClass($this->listViewNormal());
-
-
         }
-
     }
+    
+   /**
+		* @brief some basic settings are done in init function.
+		* @author Clemens Riccabona <www.riccabona.it>
+		*
+		* @param conf the configuration array (typoscript)
+		* @return void
+    **/
+    private function init($conf) {
+	    $this->conf = $conf;
+      $this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
+      $this->pi_setPiVarDefaults();
+      $this->pi_loadLL();
+      $this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+
+      // Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
+      // the site will not be cached and the month navigator will work fine
+      // "Markus Waskowski" growing-media.de
+
+      // Possible to deactivate &no_cache=1 (http://bugs.typo3.org/view.php?id=8810)
+      $this->cacheAdd = 0;
+      if ( $this->conf['calendar.']['addNoCache2Navigation'] ) {
+        $this->cacheAdd = 1;
+      }
+
+		  // Retrieve day vars
+      $this->time       = time();
+      $this->thisDay		= date('j',time());
+      $this->thisYear		= date('Y',time());
+      $this->thisMonth	= date('n',time());
+
+		  // Define parser function "hmtlentities" or "htmlspecialchars"
+      $this->parserFunction	= ($this->conf['special.']['parserFunction'] ? $this->conf['special.']['parserFunction'] : 'htmlspecialchars');
+      
+      // set css and javascript file paths from typoscript configuration
+      $this->cssCalendar		= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssCalendar']));
+      $this->cssContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['cssContextMenu']));
+      $this->jsContextMenu	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsContextMenu']));
+      $this->jsJQuery				= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQuery']));
+      $this->jsJQueryTooltip= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsJQueryTooltip']));
+      $this->jsDateChanger	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsDateChanger']));
+      $this->jsNewscalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsNewscalendar']));
+      
+    }
+    
 
     /**
 		 * Calendar array
@@ -405,6 +405,13 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         else if ($this->displayType == 4 && intval($this->conf['pageBrowser.']['show'])==0) {
             $limit = "0,".intval($this->conf['nextEvents.']['maxItems']);
         }
+        
+        // failsave order-direction
+        if ($this->conf['listView.']['order'] == 'desc') {
+	        $orderDirection = 'DESC';
+        } else {
+	        $orderDirection = 'ASC';
+        }
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                'tt_news.uid,
@@ -427,7 +434,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                 'tt_news',
                 $this->where . ' AND tt_news.pid in (' . $this->search_list . ')',
                 '',
-                'tx_newscalendar_calendardate, tt_news.datetime ASC',
+                'tx_newscalendar_calendardate, tt_news.datetime ' . $orderDirection,
                 $limit
         );
 
@@ -436,36 +443,29 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         //****************************************************************//
         //gregory goidin - rvvn : start : We need the total count to initialize the pageBrowser
 
-        /**
+        /***
          * If the type of view is able to have  a page browser we need to count the events again
          * so we have the total record count for the paginator.
          * We bypass the Calendar View by default.
          */
-        if ( $this->displayType != 1 ) {
+        if ($this->displayType != 1) {
+          $resCount = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            'count(*)',
+            'tt_news',
+             $this->where . ' AND tt_news.pid in (' . $this->search_list . ')',
+             '',
+             'tx_newscalendar_calendardate, tt_news.datetime ' . $orderDirection,
+             ''
+          );
+          $rowCount = $GLOBALS['TYPO3_DB']->sql_fetch_row($resCount);
 
-            $resCount = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                    'count(*)',
-                    'tt_news',
-                    $this->where . ' AND tt_news.pid in (' . $this->search_list . ')',
-                    '',
-                    'tx_newscalendar_calendardate, tt_news.datetime ASC',
-                    ""
-            );
-
-            $rowCount = $GLOBALS['TYPO3_DB']->sql_fetch_row($resCount);
-
-            if (    $this->displayType == 4
-                    && $rowCount[0] > intval( $this->conf['nextEvents.']['maxItems'] ) ) {
-                    $rowCount[0] = intval( $this->conf['nextEvents.']['maxItems'] );
-            }
-
-            $this->globalResCount = $rowCount[0];
-
+          if ($this->displayType == 4 && $rowCount[0] > intval($this->conf['nextEvents.']['maxItems'])) {
+            $rowCount[0] = intval($this->conf['nextEvents.']['maxItems']);
+          }
+          $this->globalResCount = $rowCount[0];
         } else {
-
-            // For calendar view we do not use limits or paginator browser
-            $this->globalResCount = $GLOBALS[ 'TYPO3_DB' ]->sql_num_rows( $this->globalRes );
-
+          // For calendar view we do not use limits or paginator browser
+          $this->globalResCount = $GLOBALS['TYPO3_DB']->sql_num_rows($this->globalRes);
         }
 
         //gregory goidin - rvvn : stop !
@@ -489,17 +489,21 @@ class tx_newscalendar_pi1 extends tslib_pibase {
                  * START: News category in list if applicable
                  */
 
-                if ( $this->categorySelection ) {
+                if ($this->categorySelection) {
 
                     $exists = false;
-                    $categoryArray = explode( ",", $this->categorySelection );
+                    $categoryArray = explode(",", $this->categorySelection);
 
                     foreach ( $categoryArray as $selectedCatId ) {
                         $exists = array_key_exists( $selectedCatId,  tx_ttnews::getCategories( $row['uid'] ) );
-                        if ( $exists ) break;
+                        if ($exists) {
+													break;
+												}
                     }
 
-                    if ( ! $exists ) continue;
+                    if (!$exists) {
+											continue;
+										}
 
                 }
 

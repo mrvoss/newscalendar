@@ -55,46 +55,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         global $LANG;
 				// call the init function, which does some basic initial settings!
 				$this->init($conf);
-
-        // Include IE canvas API
-        if ($this->conf['calendar.']['loadJGoogleCanvasAPI']) {
-          $jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsIEGoogleCanvasAPI']));
-          $jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
-        }
-        // Include jQuery API
-        if ($this->conf['calendar.']['loadJQuery']) {
-          $jsJQuery = '<script type="text/javascript" src="'.$this->jsJQuery.'"></script>' . "\n";
-        }
-        // Include tooltip API
-        if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
-          $jsJQueryTooltip = '<script type="text/javascript" src="'.$this->jsJQueryTooltip.'"></script>' . "\n";
-        }
-
-        /**
-         * IE8 compat
-				 * @todo this should be done via global metatags by the user. not by us.
-				 * this can harm the rest of the page! (ie7 is old and not very wide spread anyway.)
-         */
-        if ( $this->conf['render.']['ie7compat'] ) {
-            $ie7compat = '<!-- EXT:newscalendar: IE8 Tip Compatibility: START --> ' . '\n' .
-                         '<meta http-equiv="X-UA-Compatible" content="IE=7" />' . '\n' .
-                         '<!-- EXT:newscalendar: IE8 Tip Compatibility: END -->' . '\n\n';
-        }
-
-        $GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc']
-                =   "\n" . 
-                $ie7compat . 
-                "<!-- EXT:newscalendar: Javascript and CSS include files : START --> " . "\n" .
-                '<link href="' . $this->cssCalendar	 . '" rel="stylesheet" type="text/css" />' . "\n" .
-                '<link href="' . $this->cssContextMenu . '" rel="stylesheet" type="text/css" />' . "\n" .
-                $jGoogleCanvas . $jsJQuery . $jsJQueryTooltip .
-                '<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . "\n" .
-                '<!-- EXT:newscalendar: Javascript and CSS include files : END --> ' . "\n";
-
-		    // Set template files for list view
-        $this->listViewTemplate = $this->cObj->fileResource($this->conf['file.']['listViewTemplate']);
-        $this->calendarViewTemplate = $this->cObj->fileResource($this->conf['file.']['calendarViewTemplate']);
-
+				
+				// Add css/js files/content to header/footer
+				$this->includeHeaderFooterFiles();
 
         // Display Type ( calendar, listview, listinterval, nextevents )
         $this->displayType = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'displayType', 'sDEF');
@@ -110,11 +73,9 @@ class tx_newscalendar_pi1 extends tslib_pibase {
           $this->monthLinkDisplay = $this->conf['render.']['monthLinkDisplay'];
 				}
 
-
         // Connect all navigators to tt_news list display.
         // Next & Previous and also links to current month events
         // It needs a tt_news list plugin.
-
         $this->monthNavigationViaNews = $this->conf['render.']['monthNavigationViaNews'];
 
         // Uid of list page
@@ -156,7 +117,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         // Category List
         $this->categorySelection = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'categorySelection', 'sDEF');
         if($this->conf['render.']['categorySelection']) {
-            /**
+            /*
              * http://forge.typo3.org/issues/show/7266
              * This will add stdWrap capabilies to the parameter and enable Features like categorySelection.data = GPvar : tx_ttnews|cat
              */
@@ -171,7 +132,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         /*
          * Get the PID from which to make the menu.
         */
-
         if ( $this->startingPoint ) {
             // If a page is set as reference in the 'Startingpoint' field, use that
             $this->menuPid = $this->startingPoint;
@@ -194,7 +154,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         $this->calendarMonth = str_pad( $this->calendarMonth, 2, "0", STR_PAD_LEFT);
 
-        /**
+        /*
          *  Lang configuration
          */
         // CHANGED BY RICC
@@ -208,7 +168,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 
         $this->buildCalendarArray( );
 
-        /**
+        /*
          * 1- Calendar
          * 2- List
          * 3- List Interval
@@ -270,6 +230,60 @@ class tx_newscalendar_pi1 extends tslib_pibase {
       $this->jsDateChanger	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsDateChanger']));
       $this->jsNewscalendar	= str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsNewscalendar']));
       
+      // Set template file for list view
+      $this->listViewTemplate = $this->cObj->fileResource($this->conf['file.']['listViewTemplate']);
+      // Set template file for calendar view
+      $this->calendarViewTemplate = $this->cObj->fileResource($this->conf['file.']['calendarViewTemplate']);
+    }
+    
+    /**
+		* @brief Adds the needed css and js files to the header/footer of the html-document
+		* @author Clemens Riccabona <www.riccabona.it>
+		*
+		* @return void
+    **/
+    private function includeHeaderFooterFiles() {
+	    // Include IE canvas API
+      if ($this->conf['calendar.']['loadJGoogleCanvasAPI']) {
+        $jGoogleCanvas = str_replace(PATH_site,'',t3lib_div::getFileAbsFileName($this->conf['file.']['jsIEGoogleCanvasAPI']));
+        $jGoogleCanvas = '<!--[if IE]><script type="text/javascript" src="' . $jGoogleCanvas . '"></script><![endif]-->' . "\n";
+      }
+      // Include jQuery API
+//       if ($this->conf['calendar.']['loadJQuery']) {
+//         $jsJQuery = '<script type="text/javascript" src="' . $this->jsJQuery . '"></script>' . "\n";
+//       }
+      // Include tooltip API
+//       if ( $this->conf['calendar.']['loadJQueryTooltip'] ) {
+//         $jsJQueryTooltip = '<script type="text/javascript" src="' . $this->jsJQueryTooltip . '"></script>' . "\n";
+//       }
+
+			// IE8 compat
+			// @todo this should be done via global metatags by the user. not by us.
+			// this can harm the rest of the page! (ie7 is old and not very wide spread anyway.)
+      if ($this->conf['render.']['ie7compat']) {
+        $ie7compat = '<!-- EXT:newscalendar: IE8 Tip Compatibility: START --> ' . "\n" .
+                     '<meta http-equiv="X-UA-Compatible" content="IE=7" />' . "\n" .
+                     '<!-- EXT:newscalendar: IE8 Tip Compatibility: END -->' . "\n\n";
+      }
+      
+      $GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc'] =
+					      "\n" .
+                $ie7compat . 
+                '<!-- EXT:newscalendar: Javascript and CSS include files : START --> ' . "\n" .
+                $jGoogleCanvas .
+                '<!-- EXT:newscalendar: Javascript and CSS include files : END --> ' .
+								"\n";
+
+//       $GLOBALS['TSFE']->additionalHeaderData['tx_newscalendar_inc'] =
+// 					      '\n' .
+//                 $ie7compat . 
+//                 '<!-- EXT:newscalendar: Javascript and CSS include files : START --> ' . '\n' .
+//                 '<link href="' . $this->cssCalendar	 . '" rel="stylesheet" type="text/css" />' . '\n' .
+//                 '<link href="' . $this->cssContextMenu . '" rel="stylesheet" type="text/css" />' . '\n' .
+//                 $jGoogleCanvas . $jsJQuery . $jsJQueryTooltip .
+//                 '<script type="text/javascript" src="' . $this->jsNewscalendar . '"></script>' . '\n' .
+//                 '<!-- EXT:newscalendar: Javascript and CSS include files : END --> ' .
+// 								'\n';
     }
     
 
@@ -278,7 +292,6 @@ class tx_newscalendar_pi1 extends tslib_pibase {
 		 * All query building is done here.
 		 */
     function buildCalendarArray() {
-
         // Define the list of pages to search (999 depth level).
         $this->search_list = $this->pi_getPidList( $this->menuPid,$this->recursion );
 
@@ -290,11 +303,8 @@ class tx_newscalendar_pi1 extends tslib_pibase {
             $this->splitQuery = '';
 				}
 
-
         // gregory goidin - rvvn
         // Calculate the first and last date of the month.
-
-
         $currentTime = $this->time;
         $firstDate = $calendarStartMonth = strtotime( $this->calendarYear . '-' . $this->calendarMonth . '-01' );
         $lastDate = $calendarEndMonth = mktime( 23, 59, 59, intval( $this->calendarMonth ), date( 't', $calendarStartMonth ), intval( $this->calendarYear ) );

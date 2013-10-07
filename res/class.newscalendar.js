@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-var newscalendar = {}
+var newscalendar = {};
 
 
 newscalendar.tipSetup = function(
@@ -38,17 +38,17 @@ newscalendar.tipSetup = function(
 		shadowOffsetY: shadowOffsetY,
 		positions: positions,
 		fadeSpeed : fadeSpeed
-	}
+	};
 
-}
+};
 
 newscalendar.addToolTipSelectorClass = function( element, className ) {
     jQuery( element ).addClass( className );
-}
+};
 
 newscalendar.removeToolTipSelectorClass = function( element, className ) {
     jQuery( element ).removeClass( className );
-}
+};
 
 newscalendar.processToolTip = function( toolTipID ) {
 
@@ -129,4 +129,4 @@ newscalendar.processToolTip = function( toolTipID ) {
 		} );
 
 	} catch( e ) {}
-}
+};

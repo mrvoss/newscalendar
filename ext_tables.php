@@ -58,7 +58,9 @@ t3lib_extMgm::addPiFlexFormValue(
 
 
 // t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","News Calendar");
-t3lib_extMgm::addStaticFile($_EXTKEY,"static/","News Calendar");
+t3lib_extMgm::addStaticFile($_EXTKEY, "static/", "News Calendar");
+
+t3lib_extMgm::addStaticFile($_EXTKEY, "pi1/static/includeJSFooter/", "Newscalendar JavaScript to footer");
 
 if (TYPO3_MODE=="BE") {
 	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_newscalendar_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_newscalendar_pi1_wizicon.php';

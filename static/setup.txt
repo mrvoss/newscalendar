@@ -1,9 +1,73 @@
+### Include CSS files
+### and by default include the JS files to the header too.
+
+# most people use "page" as a variable name for the main page-object
+page {
+  includeCSS {
+    newsCalendarCssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
+    newsCalendarCssCalendar.compress = 1
+    newsCalendarCssContext = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
+    newsCalendarCssContext.compress = 1
+  }
+  includeJSlibs {
+    newscalendarJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
+    newscalendarJQuery.compress = 0
+    
+    newscalendarJQueryTip = {$plugin.tx_newscalendar_pi1.file.jsJQueryTooltip}
+    newscalendarJQueryTip.compress = 0
+    
+    newscalendarJS = {$plugin.tx_newscalendar_pi1.file.jsNewscalendar}
+    newscalendarJS.compress = 1
+  }
+}
+
+# me (clemens), I use objPage; content is copied from above
+objPage {
+  includeCSS {
+    newsCalendarCssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
+    newsCalendarCssCalendar.compress = 1
+    newsCalendarCssContext = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
+    newsCalendarCssContext.compress = 1
+  }
+  includeJSlibs {
+    newscalendarJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
+    newscalendarJQuery.compress = 0
+    
+    newscalendarJQueryTip = {$plugin.tx_newscalendar_pi1.file.jsJQueryTooltip}
+    newscalendarJQueryTip.compress = 0
+    
+    newscalendarJS = {$plugin.tx_newscalendar_pi1.file.jsNewscalendar}
+    newscalendarJS.compress = 1
+  }
+}
+
+# some people use seite (german for page); content is copied from above
+seite {
+  includeCSS {
+    newsCalendarCssCalendar = {$plugin.tx_newscalendar_pi1.file.cssCalendar}
+    newsCalendarCssCalendar.compress = 1
+    newsCalendarCssContext = {$plugin.tx_newscalendar_pi1.file.cssContextMenu}
+    newsCalendarCssContext.compress = 1
+  }
+  includeJSlibs {
+    newscalendarJQuery = {$plugin.tx_newscalendar_pi1.file.jsJQuery}
+    newscalendarJQuery.compress = 0
+    
+    newscalendarJQueryTip = {$plugin.tx_newscalendar_pi1.file.jsJQueryTooltip}
+    newscalendarJQueryTip.compress = 0
+    
+    newscalendarJS = {$plugin.tx_newscalendar_pi1.file.jsNewscalendar}
+    newscalendarJS.compress = 1
+  }
+}
+
+
+## The plugins configuration
 plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
-
 	render {
 	    monthNavigationViaNews = 0
-            ie7compat = 1 ﻿# IE8 Tip compatible
+      ie7compat = 1 ﻿# IE8 Tip compatible
 	    #dayNameLength = 3
 	    #useSubCategories = 1
 	}
@@ -18,9 +82,11 @@ plugin.tx_newscalendar_pi1 {
 	file.jsDateChanger = {$plugin.tx_newscalendar_pi1.file.jsDateChanger}
 	file.jsNewscalendar = {$plugin.tx_newscalendar_pi1.file.jsNewscalendar}
 
+	## Template files
 	file.listViewTemplate = {$plugin.tx_newscalendar_pi1.file.listViewTemplate}
 	file.calendarViewTemplate = {$plugin.tx_newscalendar_pi1.file.calendarViewTemplate}
 
+	## buttons
 	file.arrowLeft = {$plugin.tx_newscalendar_pi1.file.arrowLeft}
 	file.arrowLeftDisabled = {$plugin.tx_newscalendar_pi1.file.arrowLeftDisabled}
 	file.arrowRight = {$plugin.tx_newscalendar_pi1.file.arrowRight}
@@ -112,3 +178,5 @@ plugin.tx_newscalendar_pi1 {
 		pagefloat = center
 	}
 }
+
+## EOF

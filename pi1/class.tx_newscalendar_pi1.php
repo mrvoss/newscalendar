@@ -65,7 +65,7 @@ class tx_newscalendar_pi1 extends tslib_pibase {
         $this->pi_initPIflexForm();	// Init FlexForm configuration for plugin
         $this->pi_setPiVarDefaults();
         $this->pi_loadLL();
-        $this->pi_USER_INT_obj=0;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+        $this->pi_USER_INT_obj = 1; // don't cache, so we get the correct current date!
 
         // Added &no_cache=1 to the link, now the site can be cachable and only if a user click on nextmonth/previousmonth
         // the site will not be cached and the month navigator will work fine

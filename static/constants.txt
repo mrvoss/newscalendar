@@ -2,7 +2,6 @@
 # This are the default TS-constants for newscalendar
 ##
 
-plugin.tx_newscalendar_pi1 = USER
 plugin.tx_newscalendar_pi1 {
 
     # cat=plugin.newscalendar//0; type=string; label= StyleSheet for Calendar:  CSS file for the calendar
